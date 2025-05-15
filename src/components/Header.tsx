@@ -19,7 +19,9 @@ const Header = () => {
           <InputIcon className="pi pi-bars text-gray" />
         </button>
 
-        <Logo size="S" />
+        <div className="flex flex-1 justify-center">
+          <Logo height={24} />
+        </div>
 
         <div className="flex">
           <button

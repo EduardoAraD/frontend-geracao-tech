@@ -1,7 +1,13 @@
+import Carrousel from "../components/Carousel";
+
 const HomePage = () => {
   return (
-    <main className="flex bg-light_gray2 flex-1 h-96">
-      <h1>HOME</h1>
+    <main className="flex flex-col bg-light_gray3 flex-1">
+      <Carrousel />
+
+      <section>
+        <h4>Coleções em destaque</h4>
+      </section>
     </main>
   );
 }

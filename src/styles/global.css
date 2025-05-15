@@ -26,3 +26,25 @@
   text-decoration: none; */
   font-family: "Inter", sans-serif;
 }
+
+ul.classIndicator {
+  width: 100%;
+  gap: 10px;
+  height: 20px;
+}
+ul.classIndicator li button {
+  background-color: var(--color-light_gray2);
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+ul.classIndicator li.p-highlight button {
+  background-color: var(--color-primary);
+}
+ul.classIndicator li button:hover {
+  filter: brightness(110%);
+}
+ul.classIndicator li.p-highlight button:hover {
+  filter: brightness(120%);
+}

@@ -2,16 +2,16 @@ import logo from '../assets/logo-header.svg'
 import logoWhite from '../assets/logo-footer.svg';
 
 interface PropsLogo {
-  size: 'L' | 'S';
   color?: 'PRIMARY' | 'WHITE';
+  height: number
 }
 
-const Logo = ({ size, color = 'PRIMARY' }: PropsLogo ) => {
+const Logo = ({ height, color = 'PRIMARY' }: PropsLogo ) => {
   return (
     <>
       <img
         className='object-contain'
-        style={{ height: size === 'L' ? 44 : 26 }}
+        style={{ height }}
         src={color === 'PRIMARY' ? logo : logoWhite}
         alt="Digital Store"
       />

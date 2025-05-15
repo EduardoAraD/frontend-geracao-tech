@@ -16,5 +16,5 @@ const Button = ({ children, ...rest }: ButtonProps) => {
     </button>
   );
 }
- 
+
 export default Button;

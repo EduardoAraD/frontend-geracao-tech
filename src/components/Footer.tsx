@@ -11,7 +11,7 @@ const Footer = () => {
       <section className="flex flex-col gap-10">
         <div className="pt-1 flex flex-col gap-5">
           <div className="flex items-startjustify-items-start w-auto">
-            <Logo size="S" color="WHITE" />
+            <Logo height={29} color="WHITE" />
           </div>
           
           <p className="text-sm font-medium text-white">
