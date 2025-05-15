@@ -14,6 +14,7 @@
   --color-error: #EE4266;
   --color-success: #52CA76;
   --color-warning: #F6AA1C;
+  --color-highlight: #E7FF86;
   --color-primary_gradient: linearGradient(#C92071, #EDABCA);
   --color-secundary_gradient: linearGradient(#B5B6F2, #EFEFFF);
 }

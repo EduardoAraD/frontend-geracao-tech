@@ -7,7 +7,7 @@ import iconCart from '../assets/mini-cart.svg';
 import InputSearch from "./InputSearch";
 
 const Header = () => {
-  const [inputActive, setInputActive] = useState(true);
+  const [inputActive, setInputActive] = useState(false);
   const [visibleSideBar, setVisibleSideBar] = useState(false)
 
   return (

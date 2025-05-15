@@ -1,13 +1,55 @@
 import Carrousel from "../components/Carousel";
+import CollectionCard from "../components/CollectionCard";
+import ProductCard from "../components/ProductCard";
+import ProductOptions from "../components/ProductOptions";
+import Section from "../components/Section";
+import TitleSection from "../components/TitleSection";
+import { products } from "../services/products";
 
 const HomePage = () => {
   return (
     <main className="flex flex-col bg-light_gray3 flex-1">
       <Carrousel />
 
-      <section>
-        <h4>Coleções em destaque</h4>
-      </section>
+      <Section>
+        <TitleSection />
+
+        <CollectionCard
+          image="/collection-1.png"
+          title="Novo drop Supreme"
+          descount={30}
+          onClickButton={() => {}}
+        />
+        <CollectionCard
+          image="/collection-2.png"
+          title="Coleção Adidas"
+          descount={30}
+          onClickButton={() => {}}
+        />
+        <CollectionCard
+          image="/collection-3.png"
+          title="Novo Beats Bass"
+          descount={30}
+          onClickButton={() => {}}
+        />
+      </Section>
+
+      <Section>
+        <TitleSection />
+        <ProductOptions />
+      </Section>
+
+      <Section>
+        <TitleSection showLink />
+
+        <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
+          {products.map(item => (
+            <ProductCard {...item} />
+          ))}
+        </div>
+
+        
+      </Section>
     </main>
   );
 }
