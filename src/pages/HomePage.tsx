@@ -5,6 +5,7 @@ import ProductCard from "../components/ProductCard";
 import ProductOptions from "../components/ProductOptions";
 import Section from "../components/Section";
 import TitleSection from "../components/TitleSection";
+
 import { products } from "../services/products";
 
 const HomePage = () => {
@@ -45,7 +46,7 @@ const HomePage = () => {
 
         <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
           {products.map(item => (
-            <ProductCard {...item} />
+            <ProductCard key={item.id} {...item} />
           ))}
         </div>
       </Section>

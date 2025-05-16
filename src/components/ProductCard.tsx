@@ -1,5 +1,5 @@
 import type { Product } from "../Model/Product";
-import DescountBox from "./DescountBox"
+import DescountBox from "./DescountBox";
 
 const ProductCard = ({ id, price , descount, name, image, category }: Product) => {
   const newPrice = price * (1 - (descount / 100));
@@ -7,7 +7,7 @@ const ProductCard = ({ id, price , descount, name, image, category }: Product) =
   return (
     <div className="flex flex-col gap-2.5 max-w-[155px]" key={id}>
       <div className="flex relative h-40 max-w-[155px] p-2 bg-white rounded-md">
-        <img src={image} className="rounded-md object-cover"  alt="" />
+        <img src={image} className="rounded-md object-cover"  alt={name} />
         <div className="flex absolute top-3.5 left-3.5">
           <DescountBox descount={descount} />
         </div>

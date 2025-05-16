@@ -1,6 +1,6 @@
-
-import { Sidebar } from 'primereact/sidebar';
 import { Link } from 'react-router-dom';
+import { Sidebar } from 'primereact/sidebar';
+
 import Button from './Button';
 
 interface Props {
@@ -39,7 +39,6 @@ const SideBarMenu = ({ visible, onVisible }: Props) => {
           >Cadastrar</Link>
         </div>
       </section>
-
     </Sidebar>
   );
 }
