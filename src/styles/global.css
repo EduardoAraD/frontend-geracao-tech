@@ -17,6 +17,7 @@
   --color-highlight: #E7FF86;
   --color-primary_gradient: linearGradient(#C92071, #EDABCA);
   --color-secundary_gradient: linearGradient(#B5B6F2, #EFEFFF);
+  --color-background: #F9F8FE
 }
 
 * {
