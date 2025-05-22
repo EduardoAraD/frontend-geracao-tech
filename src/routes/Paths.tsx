@@ -6,6 +6,7 @@ import HomePage from "../pages/HomePage";
 import ProductListinPage from "../pages/ProductListingPage";
 import ProductViewPage from "../pages/ProductViewPage";
 import NotFound from "../pages/NotFound";
+import CartViewPage from "../pages/CartViewPage";
 
 const Paths = () => {
   return (
@@ -15,6 +16,8 @@ const Paths = () => {
           <Route path="/" element={<HomePage/>} />
           <Route path="/produtos" element={<ProductListinPage/>} />
           <Route path="/produtos/:id" element={<ProductViewPage/>} />
+          <Route path="/carrinho" element={<CartViewPage />} />
+          
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
