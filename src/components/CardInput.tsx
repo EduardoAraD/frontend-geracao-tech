@@ -1,4 +1,5 @@
 import type { InputHTMLAttributes } from "react";
+import InputComponent from "./InputComponent";
 
 interface CardInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
@@ -13,8 +14,7 @@ const CardInput = ({ label, onClick, id, name, ...rest}: CardInputProps) => {
         htmlFor={id}>
         { label }
       </label>
-      <input
-        className="w-full px-3 p-4 bg-light_gray3 rounded-sm placeholder:text-dark_gray3 text-dark_gray text-base font-normal focus-visible:outline-primary"
+      <InputComponent
         id={id}
         name={name}
         type="text"

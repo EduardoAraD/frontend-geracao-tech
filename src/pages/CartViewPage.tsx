@@ -11,8 +11,8 @@ const CartViewPage = () => {
     <main>
       <Section bgColor="bg-background">
         <Card>
-          <h3 className="uppercase text-sm text-dark_gray2 font-bold">Meu Carrinho</h3>
-          <div className="w-full h-[1px] bg-light_gray2" />
+          <Card.Title>MEU CARRINHO</Card.Title>
+          <Card.Line />
           <ItemCart
             image="/produc-image-1.jpeg"
             name="NOME"
@@ -45,8 +45,8 @@ const CartViewPage = () => {
         </Card>
 
         <Card>
-          <h3 className="uppercase text-sm text-dark_gray2 font-bold">RESUMO</h3>
-          <div className="w-full h-[1px] bg-light_gray2" />
+          <Card.Title>RESUMO</Card.Title>
+          <Card.Line />
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-light_gray">Subtotal:</span>
             <span className="text-sm font-medium text-light_gray">R$ 219,00</span>
@@ -60,7 +60,6 @@ const CartViewPage = () => {
             <span className="text-sm font-medium text-light_gray">R$ 30,00</span>
           </div>
           <BuyBox total={219} />
-          
         </Card>
       </Section>
       <section className="flex flex-col bg-white p-7.5 gap-5 rounded-sm">
