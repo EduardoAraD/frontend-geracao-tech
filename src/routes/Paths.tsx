@@ -8,6 +8,7 @@ import ProductViewPage from "../pages/ProductViewPage";
 import NotFound from "../pages/NotFound";
 import CartViewPage from "../pages/CartViewPage";
 import ConfirmadBuy from "../pages/ConfirmadBuy";
+import PurchaseCart from "../pages/PurchaseCart";
 
 const Paths = () => {
   return (
@@ -19,6 +20,7 @@ const Paths = () => {
           <Route path="/produtos/:id" element={<ProductViewPage/>} />
           <Route path="/carrinho" element={<CartViewPage />} />
           <Route path="/confirmar-compra" element={<ConfirmadBuy />} />
+          <Route path="/compra-finalizada" element={<PurchaseCart />} />
           
           <Route path="*" element={<NotFound />} />
         </Route>

@@ -12,9 +12,12 @@ const Card = ({ children }: CardProps) => {
   );
 }
 
-const Title = ({ children }: CardProps) => {
+interface TitleProps extends CardProps {
+  size?: 'sm' | 'base'
+}
+const Title = ({ children, size = 'sm' }: TitleProps) => {
   return (
-    <h3 className="text-sm text-dark_gray2 font-bold">{children}</h3>
+    <h3 className={`text-${size} text-dark_gray2 font-bold`}>{children}</h3>
   )
 }
 
