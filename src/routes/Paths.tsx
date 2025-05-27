@@ -11,6 +11,7 @@ import ConfirmadBuy from "../pages/ConfirmadBuy";
 import PurchaseCart from "../pages/PurchaseCart";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import MyOrders from "../pages/MyOrders";
 
 const Paths = () => {
   return (
@@ -25,6 +26,8 @@ const Paths = () => {
           <Route path="/compra-finalizada" element={<PurchaseCart />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastrar" element={<Register />} />
+          {/* minha conta / meus pedidos */}
+          <Route path="/meus-pedidos" element={<MyOrders />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>
