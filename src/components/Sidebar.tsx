@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Sidebar } from 'primereact/sidebar';
 
 import Button from './Button';
+import Card from './Card';
 
 interface Props {
   visible: boolean;
@@ -20,6 +21,14 @@ const SideBarMenu = ({ visible, onVisible }: Props) => {
       visible={visible} onHide={() => onVisible(false)}
     >
       <section className='flex flex-col gap-5 h-full'>
+        <h4 className='text-base font-bold text-dark_gray2'>Olá Francisco</h4>
+        <nav className='flex'>
+          <ul className='flex flex-col gap-2.5'>
+            <li><Link className='text-dark_gray2' to="/">Minhas Informações</Link></li>
+            <li><Link className='text-dark_gray2' to="/">Métodos de Pagamento</Link></li>
+          </ul>
+        </nav>
+        <Card.Line />
         <h4 className='text-base font-bold text-dark_gray2'>Páginas</h4>
         <nav className='flex flex-1'>
           <ul className='flex flex-col gap-2.5'>

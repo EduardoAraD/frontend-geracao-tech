@@ -1,18 +1,7 @@
 import Button from "../components/Button";
 import Card from "../components/Card";
+import ItemLinePurchase from "../components/ItemLinePurchese";
 import Section from "../components/Section";
-
-interface ItemLinePurchaseProps {
-  title: string;
-  value: string
-}
-const ItemLinePurchase = ({ title, value }: ItemLinePurchaseProps) => {
-  return (
-    <p className="text-sm font-medium text-light_gray" style={{ letterSpacing: 0.25 }}>
-      {title}: <span className="text-dark_gray">{ value }</span>
-    </p>
-  )
-}
 
 const PurchaseCart = () => {
   return (

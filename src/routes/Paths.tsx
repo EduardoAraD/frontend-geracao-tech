@@ -12,6 +12,7 @@ import PurchaseCart from "../pages/PurchaseCart";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import MyOrders from "../pages/MyOrders";
+import Profile from "../pages/Profile";
 
 const Paths = () => {
   return (
@@ -28,6 +29,7 @@ const Paths = () => {
           <Route path="/cadastrar" element={<Register />} />
           {/* minha conta / meus pedidos */}
           <Route path="/meus-pedidos" element={<MyOrders />} />
+          <Route path="/minhas-informacoes" element={<Profile />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>
