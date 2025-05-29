@@ -9,7 +9,7 @@ import StarScore from "../components/StarScore";
 import TitlePage from "../components/TitlePage";
 import TitleSection from "../components/TitleSection";
 
-import { products } from "../services/products";
+// import { products } from "../services/products";
 
 const images = [
   "/product-thumb-1.jpeg",
@@ -134,9 +134,9 @@ const ProductViewPage = () => {
         <TitleSection showLink />
 
         <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
-          {products.slice(0,2).map(item => (
+          {/* {products.slice(0,2).map(item => (
             <ProductCard key={item.id} {...item} />
-          ))}
+          ))} */}
         </div>
       </Section>
     </main>

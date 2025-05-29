@@ -1,8 +1,17 @@
-export interface Product {
-  id: string
-  name: string
+export interface ProductAPI {
+  id: number
+  title: string
   image: string
-  descount: number
   category: string
   price: number
+  description: string;
+  rating: {
+    rate: number;
+    count: number;
+  }
+}
+
+export interface Product extends ProductAPI {
+  slug: string
+  descount: number
 }

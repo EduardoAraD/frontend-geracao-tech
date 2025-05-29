@@ -6,11 +6,11 @@ import ProductCard from "../components/ProductCard";
 import Select from "../components/Select";
 import SideBarFilter from "../components/SidebarFilter";
 
-import { products } from "../services/products";
+// import { products } from "../services/products";
 
 const ProductListinPage = () => {
   const [selected, setSelected] = useState('');
-  const [showFilter, setShowFilter] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
 
   return (
     <main className="flex flex-col bg-light_gray3 flex-1 pb-15">
@@ -40,9 +40,9 @@ const ProductListinPage = () => {
         </div>
 
         <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
-          {products.map(item => (
+          {/* {products.map(item => (
             <ProductCard key={item.id} {...item} />
-          ))}
+          ))} */}
         </div>
       </Section>
     </main>

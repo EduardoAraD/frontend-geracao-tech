@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { InputIcon } from 'primereact/inputicon';
 
+import { useCart } from "../hooks/useCart";
+
 import SideBarMenu from "./Sidebar";
 import Logo from "./Logo";
 import iconCart from '../assets/mini-cart.svg';
@@ -8,9 +10,13 @@ import InputSearch from "./InputSearch";
 import ModalCart from "./ModalCart";
 
 const Header = () => {
+  const { items } = useCart();
+
   const [inputActive, setInputActive] = useState(false);
   const [visibleSideBar, setVisibleSideBar] = useState(false);
   const [visibleCart, setVisibleCart] = useState(false)
+
+  const quantityItemCart = items.length;
 
   return (
     <header className="flex flex-col bg-white relative">
@@ -38,13 +44,15 @@ const Header = () => {
             onClick={() => setVisibleCart(state => !state)}
             className="flex relative h-10 w-10 items-center justify-center cursor-pointer hover:brightness-110"
           >
-            <div className="absolute top-0.5 right-0.5 bg-primary h-4 w-4 rounded-full flex items-center justify-center">
-              <span className="text-xs text-white font-bold">2</span>
-            </div>
+            {quantityItemCart > 0 && (
+              <div className="absolute top-0.5 right-0.5 bg-primary h-4 w-4 rounded-full flex items-center justify-center">
+                <span className="text-xs text-white font-bold">{ quantityItemCart }</span>
+              </div>
+            )}
             <img src={iconCart} alt="carrinho" />
           </button>
           {visibleCart && (
-            <ModalCart />
+            <ModalCart onClose={() => setVisibleCart(false)} />
           )}
         </div>
       </div>
@@ -53,7 +61,7 @@ const Header = () => {
           <InputSearch />
         </div>
       )}
-      <SideBarMenu visible={visibleSideBar} onVisible={setVisibleSideBar} />
+      <SideBarMenu visible={visibleSideBar} onClose={() => setVisibleSideBar(false)} />
     </header>
   );
 }

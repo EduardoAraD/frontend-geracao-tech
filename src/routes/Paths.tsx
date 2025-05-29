@@ -28,8 +28,8 @@ const Paths = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/cadastrar" element={<Register />} />
           {/* minha conta / meus pedidos */}
-          <Route path="/meus-pedidos" element={<MyOrders />} />
-          <Route path="/minhas-informacoes" element={<Profile />} />
+          <Route path="/minha-conta/meus-pedidos" element={<MyOrders />} />
+          <Route path="/minhas-conta" element={<Profile />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>

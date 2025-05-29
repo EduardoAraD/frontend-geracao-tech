@@ -1,3 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
+import { useCart } from "../hooks/useCart";
+
 import Button from "./Button";
 import Card from "./Card";
 
@@ -22,28 +26,49 @@ const ItemCart  = () => {
   );
 }
 
-const ModalCart = () => {
+interface ModalCartProps {
+  onClose: () => void;
+}
+
+const ModalCart = ({ onClose }: ModalCartProps) => {
+  const { items, emptyCart } = useCart()
+  const navigate = useNavigate()
+
+  const isEmptyCart = items.length <= 0;
+
+  function goToCart() {
+    navigate('/carrinho');
+    onClose();
+  }
+
   return (
-    <div className="absolute right-2.5 top-15 flex max-w-[315px] shadow-2xl shadow-dark_gray overflow-hidden rounded-xl z-10">
+    <div className="absolute right-2.5 top-15 flex w-full max-w-[315px] shadow-2xl shadow-dark_gray overflow-hidden rounded-xl z-10">
       <Card>
         <Card.Title size="base">Meu Carrinho</Card.Title>
         <Card.Line />
 
-        <ItemCart />
-        <ItemCart />
+        {isEmptyCart ? (
+          <p className="text-sm text-dark_gray3 font-bold text-center">
+            Carrinho vazio!
+          </p>
+        ): items.map(item => (
+          <ItemCart key={item.id} />
+        ))}
 
         <Card.Line />
         <div className="flex items-center justify-between">
           <strong className="text-base text-dark_gray">Valor Total:</strong>
-          <strong className="text-base text-error">R$ 219,00</strong>
+          <strong className="text-base text-error">R$ 0,00</strong>
         </div>
         <div className="flex justify-between items-center">
-          <button className="cursor-pointer hover:brightness-110 duration-200">
+          <button
+            onClick={emptyCart}
+            className="cursor-pointer hover:brightness-110 duration-200">
             <span className="font-medium text-sm text-dark_gray2 underline">Esvaziar</span>
           </button>
 
           <div>
-            <Button>
+            <Button onClick={goToCart}>
               Ver Carrinho
             </Button>
           </div>
