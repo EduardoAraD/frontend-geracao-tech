@@ -2,7 +2,7 @@ const NotFound = () => {
   return (
     <main>
       <h2>
-        COmo voce chegou aqui?
+        Como voce chegou aqui?
       </h2>
     </main>
   );

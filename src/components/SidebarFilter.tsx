@@ -14,17 +14,18 @@ type GenderOptions = 'new' | 'old'
 
 const SideBarFilter = ({ visible, onVisible }: Props) => {
   const [showAdiddas, setShowAdiddas] = useState(true);
-  const [filterGender, setFilterGender] = useState<GenderOptions | ''>('');
+  const [filterState, setFilterState] = useState<GenderOptions | ''>('');
 
   //75, 36
 
-  function selectedFilterGender(value: GenderOptions) {
-    if(value === filterGender) {
-      setFilterGender('')
+  function selectedFilterState(value: GenderOptions) {
+    if(value === filterState) {
+      setFilterState('')
     } else {
-      setFilterGender(value);
+      setFilterState(value);
     }
   }
+
   return (
     <Sidebar
       className='mt-18 p-7.5 bg-white'
@@ -69,8 +70,8 @@ const SideBarFilter = ({ visible, onVisible }: Props) => {
           </div>
           <div className='flex gap-2.5 flex-col'>
             <h5 className='text-sm font-bold text-dark_gray2'>Estado</h5>
-            <Radio checked={filterGender === 'new'} onChecked={() => selectedFilterGender('new')} title="Novo" />
-            <Radio checked={filterGender === 'old'} onChecked={() => selectedFilterGender('old')} title="Usado" />
+            <Radio checked={filterState === 'new'} onChecked={() => selectedFilterState('new')} title="Novo" />
+            <Radio checked={filterState === 'old'} onChecked={() => selectedFilterState('old')} title="Usado" />
           </div>
         </div>
       </section>

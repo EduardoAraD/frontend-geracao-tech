@@ -1,7 +1,12 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { InputIcon } from "primereact/inputicon";
 
+import { useCart } from "../hooks/useCart";
+
+import { emptyProduct, type Product } from "../Model/Product";
 import Button from "../components/Button";
+import OptionsProduct from "../components/OptionsProduct";
 import ProductCard from "../components/ProductCard";
 import Section from "../components/Section";
 import Stars from "../components/Stars";
@@ -9,25 +14,23 @@ import StarScore from "../components/StarScore";
 import TitlePage from "../components/TitlePage";
 import TitleSection from "../components/TitleSection";
 
-// import { products } from "../services/products";
-
-const images = [
-  "/product-thumb-1.jpeg",
-  "/product-thumb-2.jpeg",
-  "/product-thumb-3.jpeg",
-  "/product-thumb-4.jpeg",
-  "/product-thumb-5.jpeg",
-];
-const sizes = [39, 40, 41, 42, 43];
-const colors = ['#6FEEFF', '#FF6969', '#5E5E5E', '#6D70B7']
+import { getProduct, getProductByCategorys } from "../services/products";
+import { getFormatMoney } from "../utils/formatMoney";
 
 const ProductViewPage = () => {
+  const { pathname } = useLocation();
+  const { addProduct } = useCart()
+  
+  const [product, setProduct] = useState<Product>(emptyProduct);
+  const [similarProducts, setSimilarProducts] = useState<Product[]>([])
+
+  const [loading, setLoading] = useState(true);
   const [indexImage, setIndexImage] = useState(0);
-  const [size, setSize] = useState(sizes[2]);
-  const [color, setColor] = useState(colors[1]);
+  const [size, setSize] = useState('');
+  const [color, setColor] = useState('');
 
   function nextImage() {
-    if(indexImage + 1 > images.length) {
+    if(indexImage + 1 >= product.images.length) {
       setIndexImage(0)
     } else {
       setIndexImage(state => state + 1)
@@ -36,20 +39,46 @@ const ProductViewPage = () => {
 
   function prevImage() {
     if(indexImage <= 0) {
-      setIndexImage(images.length - 1)
+      setIndexImage(product.images.length - 1)
     } else {
       setIndexImage(state => state - 1)
     }
   }
 
+  function addProductInCart() {
+    addProduct({
+      product,
+      quantity: 1
+    })
+  }
+
+  const loadProduct = useCallback(async () => {
+    const id = pathname.split('/')[2].split('-')[0]
+    const response = await getProduct(id);
+
+    if(response !== null) {
+      const listProducts = await getProductByCategorys(response.categorys.map(item => item.id))
+      setProduct(response)
+      setSimilarProducts(listProducts);
+    }
+    setLoading(false)
+  }, [pathname]);
+
+  useEffect(() => {
+    loadProduct()
+  }, [loadProduct])
+
   const imageSource = useMemo(() => {
-    return images[indexImage];
-  }, [indexImage])
+    return product.images[indexImage];
+  }, [indexImage, product.images]);
 
   return (
     <main className="pb-10 bg-background">
       <Section bgColor="bg-background">
         <TitlePage nameProduct="Tênis Nike Revolution 6 Next Nature Masculino" />
+        {loading ? (
+          <p>Carregando ...</p>
+        ) : (
         <div className="flex flex-col gap-2.5">
           <div className="flex w-full relative max-w-[700px]">
             <img className="w-full" src={imageSource} alt="" />
@@ -63,7 +92,7 @@ const ProductViewPage = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            {images.map((item, index) => (
+            {product.images.map((item, index) => (
               <button
                 key={`${index}-${item}`}
                 onClick={() => setIndexImage(index)}
@@ -73,70 +102,69 @@ const ProductViewPage = () => {
             ))}
           </div>
         </div>
+        )}
+        
         
         <h2 className="mt-10 text-2xl text-dark_gray font-bold">
-          Tênis Nike Revolution 6 Next Nature Masculino
+          {product.name}
         </h2>
         <p className="mt-2.5 text-xs font-medium text-dark_gray3">
-          Casual | Nike | REF:38416711</p>
+          {product.categorys.map(item => item.name).join(', ')} | {product.mark} | REF:{product.id}</p>
         <div className="flex items-center gap-2.5">
-          <Stars score={4.7} />
-          <StarScore score={4.7} />
+          <Stars score={product.rate} />
+          <StarScore score={product.rate} />
           <p className="font-medium text-sm text-light_gray">(90 avaliações)</p>
         </div>
 
         <div className="flex items-end gap-2.5">
-          <p className="text-dark_gray2 text-base font-normal">R$ <strong><span className="text-[2rem]">219</span>,00</strong></p>
-          <span className="font-normal text-base text-light_gray2 line-through mb-[7px]">219,00</span>
+          <p className="text-dark_gray2 text-base font-normal">R$ <strong><span className="text-[2rem]">{getFormatMoney(product.price_with_discount)}</span></strong></p>
+          <span className="font-normal text-base text-light_gray2 line-through mb-[7px]">
+            {getFormatMoney(product.price)}
+          </span>
         </div>
 
         <h4 className="text-sm font-bold text-light_gray mt-5 mb-1">
           Descrição do produto
         </h4>
         <p className="text-sm font-medium text-dark_gray2">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum sed quisquam deleniti temporibus iusto porro at inventore. Unde assumenda ea ipsum rem quos magni vero, delectus sed dicta consequuntur saepe!
+          {product.description}
         </p>
+        {product.options.map(item => (
+          <OptionsProduct key={item.title}>
+            <OptionsProduct.Title title={item.title} />
+            {item.type === 'color' ? (
+              <OptionsProduct.Colors
+                colors={item.values}
+                colorSelected={color}
+                onColor={setColor}
+              />
+            ) : (
+              <OptionsProduct.Sizes
+                sizes={item.values}
+                sizeSelected={size}
+                onSize={setSize}
+              />
+            )}
+          </OptionsProduct>
+        ))}
 
-        <h4 className="text-sm font-bold text-light_gray mt-5 mb-2.5">Tamanho</h4>
-        <div className="flex gap-2.5">
-          {sizes.map(item => (
-            <button
-              onClick={() => setSize(item)}
-              key={item}
-              className={`h-12 w-12 flex justify-center items-center border-1 cursor-pointer duration-200 rounded-sm ${item === size ? 'bg-primary border-primary' : 'bg-white border-light_gray2'} hover:brightness-110`}
-            >
-              <span className={`text-base font-bold ${item === size ? 'text-white' : 'text-dark_gray2'}`}>
-                { item }
-              </span>
-            </button>
-          ))}
-         
-        </div>
-
-        <h4 className="text-sm font-bold text-light_gray mt-5 mb-1">Cor</h4>
-        <div className="flex gap-2.5 mb-12">
-          {colors.map(item => (
-            <button
-              key={item}
-              onClick={() => setColor(item)}
-              className={`bg-white p-0.5 rounded-full shadow-dark_gray shadow-2xl border-2 duration-200 hover:brightness-110 ${color === item ? 'border-primary' : 'border-white'}`}
-            >
-              <div className="h-8 w-8 rounded-full" style={{ backgroundColor: item }} />
-            </button>
-          ))}
-          
-        </div>
-
-        <Button bgColor="warning" size='large'>COMPRAR</Button>
+        <Button
+          className="mt-12"
+          bgColor="warning"
+          size='large'
+          onClick={addProductInCart}
+        >
+          COMPRAR
+        </Button>
       </Section>
 
       <Section bgColor="bg-background">
         <TitleSection showLink />
 
         <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
-          {/* {products.slice(0,2).map(item => (
+          {similarProducts.slice(0,2).map(item => (
             <ProductCard key={item.id} {...item} />
-          ))} */}
+          ))}
         </div>
       </Section>
     </main>

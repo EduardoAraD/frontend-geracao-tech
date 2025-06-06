@@ -9,5 +9,5 @@ const DescountBox = ({ descount }: DescountBoxProps) => {
     </div>
   );
 }
- 
+
 export default DescountBox;

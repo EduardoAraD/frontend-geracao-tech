@@ -1,17 +1,20 @@
-import type { Product, ProductAPI } from "../Model/Product";
-import { getDescount } from "../utils/getDescount";
+import type { Product } from "../Model/Product";
 import { api } from "./api";
 
-export async function getAllProducts(): Promise<Product[]> {
-  try {
-    const response = await api.get('/products');
+interface ProductApiSearch {
+  limit: number;
+  page: number;
+  total: number;
+  data: Product[]
+}
 
-    const productsApi: ProductAPI[] = response.data;
-    return productsApi.map(item => ({
-      ...item,
-      slug: `${item.id}-${item.title.replace(' ','-')}`,
-      descount: getDescount(item.id),
-    }));
+export async function getProducts(): Promise<Product[]> {
+  try {
+    const response = await api.get('/product');
+
+    const data: ProductApiSearch = response.data;
+
+    return data.data;
   } catch (error) {
     console.log(error);
     return [];
@@ -19,15 +22,53 @@ export async function getAllProducts(): Promise<Product[]> {
 }
 
 export async function getSomeProducts(): Promise<Product[]> {
-  const list = await getAllProducts();
+  try {
+    const response = await api.get('/product?limit=6');
 
-  return list.filter(item => item.descount > 15);
+    const productsApi: ProductApiSearch = response.data;
+
+    return productsApi.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 }
 
-export async function getProductHigh(): Promise<Product> {
-  const list = await getAllProducts();
+export async function getProductHigh(): Promise<Product | null> {
+  try {
+    const response = await api.get('/productHigh');
 
-  const sort = list.sort((a, b) => a.rating.count < b.rating.count ? 1 : -1)
+    const product: Product = response.data.product;
 
-  return sort[0];
+    return product;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getProduct(id: string): Promise<Product | null> {
+  try {
+    const response = await api.get(`/product/${id}`);
+
+    const { product } = response.data;
+
+    return product;
+  } catch (error) {
+    console.log(error);
+    return null
+  }
+}
+
+export async function getProductByCategorys(categorys: number[]) {
+  try {
+    const response = await api.get(`/product?category_ids=${categorys}&limit=8`);
+
+    const productsApi: ProductApiSearch = response.data;
+
+    return productsApi.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 }

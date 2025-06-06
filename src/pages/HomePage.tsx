@@ -75,19 +75,19 @@ const HomePage = () => {
       {productHigh !== null && (
         <Section bgColor="bg-white">
           <div className="flex justify-center items-center h-[280px] w-[280px] m-auto rounded-full bg-[linear-gradient(180deg,_#B5B6F2_0%,_#FFFFFF_60%)]">
-            <img src={productHigh.image} className="h-full w-full object-contain" height={280} width={280} alt="" />
+            <img src={productHigh.images.length > 0 ? productHigh.images[0] : '/sale.png'} className="h-full w-full object-contain rounded-full" height={280} width={280} alt="" />
           </div>
           <div className="flex flex-col gap-2.5">
             <span className="text-sm font-bold text-warning">Oferta especial</span>
             <h3 className="text-3xl font-bold text-dark_gray2">
-              {productHigh.title}
+              {productHigh.name}
             </h3>
             <p className="text-sm font-medium text-dark_gray2 mt-2.5">
               {productHigh.description}
             </p>
             <div className="mt-5 w-52">
               <Button
-                onClick={() => navigate(`/produtos/${productHigh.slug}`)}
+                onClick={() => navigate(`/produtos/${productHigh.id}-${productHigh.slug}`)}
               >Ver Oferta</Button>
             </div>
           </div>
