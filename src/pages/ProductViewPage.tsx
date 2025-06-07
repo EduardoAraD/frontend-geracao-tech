@@ -48,7 +48,9 @@ const ProductViewPage = () => {
   function addProductInCart() {
     addProduct({
       product,
-      quantity: 1
+      quantity: 1,
+      color,
+      size,
     })
   }
 

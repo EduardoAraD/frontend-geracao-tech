@@ -1,4 +1,5 @@
 import { createContext, useState, type ReactNode } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 import type { ItemCart } from "../Model/ItemCart";
 import type { Product } from "../Model/Product";
@@ -9,22 +10,24 @@ interface CartProviderProps {
 
 interface CartContextProps {
   items: ItemCart[];
-  addProduct: ({ product, quantity }: { product: Product, quantity: number }) => void;
+  addProduct: (itemCart: { product: Product, quantity: number, color: string, size: string }) => void;
   removeProduct: (idItemCart: string) => void;
   updateQuantityProduct: ({ quantity, id }: { quantity: number, id: string }) => void;
   emptyCart: () => void;
 }
 
-export const CartContext = createContext({} as CartContextProps);
+const CartContext = createContext({} as CartContextProps);
 
-export function CartProvider({ children }: CartProviderProps) {
+function CartProvider({ children }: CartProviderProps) {
   const [items, setItems] = useState<ItemCart[]>([])
 
-  function addProduct({ product, quantity }: { product: Product, quantity: number }) {
+  function addProduct({ product, quantity, color, size }: { product: Product, quantity: number, color: string, size: string }) {
     const newItemCart: ItemCart = {
-      id: '',
+      id: uuidv4(),
       product,
       quantity,
+      color,
+      size
     }
 
     setItems(state => [ ...state, newItemCart ])
@@ -35,7 +38,7 @@ export function CartProvider({ children }: CartProviderProps) {
   }
 
   function updateQuantityProduct({ quantity, id }: { quantity: number, id: string }) {
-    setItems(state => state.map(item => item.id === id ? ({ ...item, quantity }) : item))
+    setItems(state => state.map(item => item.id === id ? ({ ...item, quantity }) : item));
   }
 
   function emptyCart() {
@@ -56,3 +59,5 @@ export function CartProvider({ children }: CartProviderProps) {
     </CartContext.Provider>
   )
 }
+
+export { CartProvider, CartContext }

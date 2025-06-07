@@ -5,7 +5,7 @@ import { useCart } from "../hooks/useCart";
 import Button from "./Button";
 import Card from "./Card";
 import { getFormatMoney } from "../utils/formatMoney";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 interface ItemCartProps {
   image: string
@@ -64,6 +64,19 @@ const ModalCart = ({ onClose }: ModalCartProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
+  const total = useMemo(() => {
+    const initialValue = 0;
+
+    return items.reduce(
+      (accumulator, itemCart) => {
+        const valueProduct = itemCart.product.price_with_discount * itemCart.quantity
+
+        return accumulator + valueProduct;
+      },
+      initialValue,
+    );
+  }, [items])
+
   return (
     <div
       ref={op}
@@ -89,7 +102,7 @@ const ModalCart = ({ onClose }: ModalCartProps) => {
         <Card.Line />
         <div className="flex items-center justify-between">
           <strong className="text-base text-dark_gray">Valor Total:</strong>
-          <strong className="text-base text-error">R$ 0,00</strong>
+          <strong className="text-base text-error">R$ {getFormatMoney(total)}</strong>
         </div>
         <div className="flex justify-between items-center">
           <button

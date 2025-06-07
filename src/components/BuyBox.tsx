@@ -1,11 +1,13 @@
+import { getFormatMoney } from "../utils/formatMoney";
+
 interface BuyBoxProps {
   total: number
 }
 
 const BuyBox = ({ total }: BuyBoxProps) => {
   const parcelas = 10;
-  const valueString = total.toFixed(2).replace('.', ',');
-  const valueParcelado = (total / parcelas).toFixed(2).replace('.', ',')
+  const valueString = getFormatMoney(total);
+  const valueParcelado = getFormatMoney(total / parcelas)
 
   return (
     <div className="flex flex-col">

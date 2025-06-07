@@ -1,3 +1,5 @@
+import { useMemo, useState } from "react";
+
 import Button from "../components/Button";
 import BuyBox from "../components/BuyBox";
 import Card from "../components/Card";
@@ -5,25 +7,72 @@ import CardInput from "../components/CardInput";
 import ItemCart from "../components/ItemCart";
 import Section from "../components/Section";
 import ValueCart from "../components/ValueCart";
+import { useCart } from "../hooks/useCart";
+import { getFormatMoney } from "../utils/formatMoney";
 
 const CartViewPage = () => {
+  const { items } = useCart();
+  const [cep, setCep] = useState('')
+  // const [descount, setDescount] = useState(0)
+  // const [priceFreigh, setPriceFreigh] = useState(0)
+
+  const { totalPrice, totalWithDescount } = useMemo(() => {
+    const initialValue = 0;
+
+    const totalPrice = items.reduce(
+      (accumulator, itemCart) => {
+        const valueProduct = itemCart.product.price * itemCart.quantity
+
+        return accumulator + valueProduct;
+      },
+      initialValue,
+    );
+
+    const totalWithDescount = items.reduce(
+      (accumulator, itemCart) => {
+        const valueProduct = itemCart.product.price_with_discount * itemCart.quantity
+
+        return accumulator + valueProduct;
+      },
+      initialValue,
+    );
+
+    return {
+      totalPrice,
+      totalWithDescount,
+    }
+  }, [items]);
+
+  const total = useMemo(() => {
+    return totalPrice;
+  }, [totalPrice])
+
+  async function handleGetValueFreight() {
+    console.log('Freigh')
+  }
+
   return (
     <main>
       <Section bgColor="bg-background">
         <Card>
           <Card.Title>MEU CARRINHO</Card.Title>
           <Card.Line />
-          <ItemCart
-            image="/produc-image-1.jpeg"
-            name="NOME"
-            color="Vermelho/Branco"
-            size="42"
-            quantitaty={1}
-            totalPrice={219}
-            descount={10}
-          />
+          {items.map(item => (
+            <ItemCart
+              key={item.id}
+              id={item.id}
+              image={item.product.images.length > 0 ? item.product.images[0] : '/produc-image-1.jpeg'}
+              name={item.product.name}
+              color={item.color}
+              size={item.size}
+              quantitaty={item.quantity}
+              price={item.product.price}
+              priceWithDescount={item.product.price_with_discount}
+              stock={item.product.stock}
+            />
+          ))}
 
-          <ValueCart title="Total" descountInPorcentage={10} total={10} />
+          <ValueCart title="Total" price={totalPrice} priceWithDescount={totalWithDescount} />
         </Card>
 
         <Card>
@@ -39,7 +88,9 @@ const CartViewPage = () => {
           <CardInput
             id="freight"
             label="Calculo do frete"
-            onClick={() => {}}
+            value={cep}
+            onChange={(e) => setCep(e.target.value)}
+            onClick={handleGetValueFreight}
             placeholder="Insira seu CEP"
           />
         </Card>
@@ -49,21 +100,21 @@ const CartViewPage = () => {
           <Card.Line />
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-light_gray">Subtotal:</span>
-            <span className="text-sm font-medium text-light_gray">R$ 219,00</span>
+            <span className="text-sm font-medium text-light_gray">R$ {getFormatMoney(totalWithDescount)}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-light_gray">Frete:</span>
-            <span className="text-sm font-medium text-light_gray">R$ 0,00</span>
+            <span className="text-sm font-medium text-light_gray">R$ {getFormatMoney(0)}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-light_gray">Desconto:</span>
-            <span className="text-sm font-medium text-light_gray">R$ 30,00</span>
+            <span className="text-sm font-medium text-light_gray">R$ {getFormatMoney(0)}</span>
           </div>
-          <BuyBox total={219} />
+          <BuyBox total={total} />
         </Card>
       </Section>
       <section className="flex flex-col bg-white p-7.5 gap-5 rounded-sm">
-        <BuyBox total={219} />
+        <BuyBox total={total} />
 
         <Button bgColor="warning">Continuar</Button>
       </section>
