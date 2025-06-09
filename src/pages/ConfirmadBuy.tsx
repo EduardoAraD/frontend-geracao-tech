@@ -167,7 +167,7 @@ const ConfirmadBuy = () => {
       <section className="flex flex-col bg-white p-7.5 gap-5 rounded-sm">
         <BuyBox total={219} />
 
-        <Button bgColor="warning">Continuar</Button>
+        <Button bgColor="warning">Realizar Pagamento</Button>
       </section>
     </main>
   );

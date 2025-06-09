@@ -1,9 +1,48 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { useUser } from "../hooks/useUser";
 import Button from "../components/Button";
 import LabelInput from "../components/LabelInput";
 import Section from "../components/Section";
 
+import { getLoginUserServices } from "../services/user";
+
 const Login = () => {
+  const { saveUser } = useUser();
+  const { search } = useLocation();
+  const navigate = useNavigate()
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin() {
+    event.preventDefault();
+
+    setLoading(true);
+    // event.preventDefault();
+    // console.log(event);
+    const response = await getLoginUserServices({ email, password });
+
+    setLoading(false);
+    if(response !== null) {
+      const { user, token } = response;
+      saveUser({ token, user })
+
+      if(search !== undefined) {
+        const path = search.split('?')[1]
+        if(path === 'carrinho') {
+          return navigate('/carrinho')
+        }
+      }
+      navigate('/');
+    }
+    else {
+      console.log('ERROR');
+    }
+  }
+
   return (
     <main>
       <Section bgColor="bg-[linear-gradient(180deg,_#B5B6F2_0%,_#EFEFFF_100%)]">
@@ -15,20 +54,28 @@ const Login = () => {
                 Já possui uma conta? Entre <Link to="/cadastrar" className="underline cursor-pointer">aqui</Link>.
               </p>
             </div>
-            <form action="" className="flex flex-col gap-5">
+            <form action={handleLogin} className="flex flex-col gap-5">
               <LabelInput>
-                <LabelInput.Label>Login *</LabelInput.Label>
-                <LabelInput.Input />
+                <LabelInput.Label>E-mail *</LabelInput.Label>
+                <LabelInput.Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                />
               </LabelInput>
               <LabelInput>
                 <LabelInput.Label>Senha *</LabelInput.Label>
-                <LabelInput.Input type="password" />
+                <LabelInput.Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </LabelInput>
 
               <button className="cursor-pointer hover:brightness-150 duration-100">
                 <span className="text-dark_gray2 font-medium text-sm underline">Esqueci a senha</span>
               </button>
-              <Button>Criar Conta</Button>
+              <Button loading={loading} type="submit">Acessar Conta</Button>
             </form>
 
             <div className="flex flex-col justify-center items-center gap-2.5">

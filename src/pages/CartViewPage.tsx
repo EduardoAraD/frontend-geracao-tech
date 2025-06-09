@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { useCart } from "../hooks/useCart";
 
 import Button from "../components/Button";
 import BuyBox from "../components/BuyBox";
@@ -7,11 +10,13 @@ import CardInput from "../components/CardInput";
 import ItemCart from "../components/ItemCart";
 import Section from "../components/Section";
 import ValueCart from "../components/ValueCart";
-import { useCart } from "../hooks/useCart";
+
 import { getFormatMoney } from "../utils/formatMoney";
 
 const CartViewPage = () => {
   const { items } = useCart();
+  const navigate = useNavigate()
+
   const [cep, setCep] = useState('')
   // const [descount, setDescount] = useState(0)
   // const [priceFreigh, setPriceFreigh] = useState(0)
@@ -44,11 +49,15 @@ const CartViewPage = () => {
   }, [items]);
 
   const total = useMemo(() => {
-    return totalPrice;
-  }, [totalPrice])
+    return totalWithDescount;
+  }, [totalWithDescount])
 
   async function handleGetValueFreight() {
     console.log('Freigh')
+  }
+
+  async function handleConfirmCart() {
+    navigate('/confirmar-compra')
   }
 
   return (
@@ -116,7 +125,12 @@ const CartViewPage = () => {
       <section className="flex flex-col bg-white p-7.5 gap-5 rounded-sm">
         <BuyBox total={total} />
 
-        <Button bgColor="warning">Continuar</Button>
+        <Button
+          bgColor="warning"
+          onClick={handleConfirmCart}
+        >
+          Continuar
+        </Button>
       </section>
     </main>
   );
