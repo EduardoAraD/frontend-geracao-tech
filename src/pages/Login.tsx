@@ -59,7 +59,7 @@ const Login = () => {
                 <LabelInput.Label>E-mail *</LabelInput.Label>
                 <LabelInput.Input
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChangeText={setEmail}
                   type="email"
                 />
               </LabelInput>
@@ -68,7 +68,7 @@ const Login = () => {
                 <LabelInput.Input
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChangeText={setPassword}
                 />
               </LabelInput>
 

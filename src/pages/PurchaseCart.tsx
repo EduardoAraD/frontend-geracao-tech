@@ -1,11 +1,37 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 
+import { useUser } from '../hooks/useUser';
+
+import { purchaseApiEmpty, type PurchaseApi } from '../Model/Purchase';
 import Button from "../components/Button";
 import Card from "../components/Card";
 import ItemLinePurchase from "../components/ItemLinePurchese";
 import Section from "../components/Section";
 
+import { getPurchaseByRefServices } from '../services/purchase';
+import { getFormatMoney } from '../utils/formatMoney';
+
 const PurchaseCart = () => {
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [purchase, setPurchase] = useState<PurchaseApi>(purchaseApiEmpty)
+
+  const loadPurchase = useCallback(async () => {
+    if(user !== null) {
+      if(id === undefined) {
+        navigate('/')
+        return ;
+      }
+      const response = await getPurchaseByRefServices({ ref: id });
+      if(response !== null) {
+        setPurchase(response);
+      }
+    }
+  }, [id, navigate, user])
 
   function screenPage() {
     html2canvas(document.getElementById('#capture'))
@@ -18,6 +44,32 @@ const PurchaseCart = () => {
         link.click();
       })
   }
+
+  useEffect(() => {
+    loadPurchase()
+  }, [loadPurchase])
+
+  const { total, installment } = useMemo(() => {
+    const initialValue = 0;
+
+    const total = purchase.products.reduce(
+      (accumulator, product) => {
+        const valueProduct = product.price_with_discount * product.quantity;
+
+        return accumulator + valueProduct;
+      },
+      initialValue,
+    );
+
+    const installment = 10;
+    const value = getFormatMoney(total);
+    const valueInstallment = getFormatMoney(total / installment);
+
+    return {
+      total: value,
+      installment: valueInstallment,
+    }
+  }, [purchase.products])
 
   return (
     <main>
@@ -34,28 +86,34 @@ const PurchaseCart = () => {
                 <Card.Title size="base">
                   Informações Pessoais
                 </Card.Title>
-                <ItemLinePurchase title='Nome' value='Francisco Antonio Pereira' />
-                <ItemLinePurchase title='CPF' value='123465789-12' />
-                <ItemLinePurchase title='E-mail' value='francisco@gmail.com' />
-                <ItemLinePurchase title='Celular' value='(85) 55555-5555' />
+                <ItemLinePurchase title='Nome' value={purchase.name_completed} />
+                <ItemLinePurchase title='CPF' value={purchase.cpf} />
+                <ItemLinePurchase title='E-mail' value={purchase.email} />
+                <ItemLinePurchase title='Celular' value={purchase.phone} />
               </div>
               <Card.Line />
               <div className="flex flex-col gap-2.5">
                 <Card.Title size="base">
                   Informações de Entrega
                 </Card.Title>
-                <ItemLinePurchase title='Endereço' value='Rua João Pessoa, 333' />
-                <ItemLinePurchase title='Bairro' value='Centro' />
-                <ItemLinePurchase title='Cidade' value='Fortaleza, Ceará' />
-                <ItemLinePurchase title='CEP' value='433-8800' />
+                <ItemLinePurchase title='Endereço' value={purchase.address} />
+                <ItemLinePurchase title='Bairro' value={purchase.district} />
+                <ItemLinePurchase title='Cidade' value={purchase.city} />
+                <ItemLinePurchase title='CEP' value={purchase.cep} />
               </div>
               <Card.Line />
               <div className="flex flex-col gap-2.5">
                 <Card.Title size="base">
                   Informações de Pagamento
                 </Card.Title>
-                <ItemLinePurchase title='Titular do Cartão' value='FRANCISCO A P' />
-                <ItemLinePurchase title='Final' value='*********2020' />
+                {purchase.type_payment === 'billet' ? (
+                  <ItemLinePurchase title='Pagamento' value='Boleto' />
+                ) : (
+                  <>
+                    <ItemLinePurchase title='Titular do Cartão' value={purchase.name_card} />
+                    <ItemLinePurchase title='Final' value={purchase.number_card} />
+                  </>
+                )}
               </div>
 
               <Card.Line />
@@ -64,23 +122,29 @@ const PurchaseCart = () => {
                 Resumo da compra
               </Card.Title>
 
-              <div className="flex gap-5">
-                <img
-                  className="object-cover rounded-xs max-h-12 h-full"
-                  width={70} src="/produc-image-1.jpeg" alt=""
-                />
-                <strong className="flex-1 text-sm pb-2.5 text-dark_gray">
-                  Tênis Nike Revolution 6 Next Nature Masculino
-                </strong>
-              </div>
+              {purchase.products.map(product => (
+                <div className="flex gap-5" key={product.id}>
+                  <img
+                    className="object-cover rounded-xs max-h-12 h-full"
+                    width={70} src={product.images.length > 0 ? product.images[0] : '/produc-image-1.jpeg'}
+                    alt={product.name}
+                  />
+                  <div className='flex flex-col w-full'>
+                    <strong className="flex-1 text-sm pb-2.5 text-dark_gray">
+                      { product.name }
+                    </strong>
+                    <p className='text-xs text-light_gray text-right'>x { product.quantity }</p>
+                  </div>
+                </div>
+              ))}
 
               <div className="flex flex-col bg-[#F6AA1C0C] border border-[#F6AA1C26] p-5">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-dark_gray">Total</h3>
-                  <span className="text-lg font-bold text-dark_gray">R$ 219,00</span>
+                  <span className="text-lg font-bold text-dark_gray">R$ {total}</span>
                 </div>
                 <span className="text-xs font-medium text-light_gray text-right">
-                  ou 10x de R$ 21,90 sem juros
+                  ou 10x de R$ { installment } sem juros
                 </span>
               </div>
 

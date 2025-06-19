@@ -98,7 +98,7 @@ const CartViewPage = () => {
             id="freight"
             label="Calculo do frete"
             value={cep}
-            onChange={(e) => setCep(e.target.value)}
+            onChangeText={setCep}
             onClick={handleGetValueFreight}
             placeholder="Insira seu CEP"
           />

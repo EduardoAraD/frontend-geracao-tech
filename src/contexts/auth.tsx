@@ -1,6 +1,8 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import type { User } from "../Model/User";
 import { api } from "../services/api";
+import { getUserLocalStorage, removeUserLocalStorage, saveUserLocalStorage } from "../lib/localStorage/user";
+import { getTokenLocalStorage, removeTokenLocalStorage, saveTokenLocalStorage } from "../lib/localStorage/token";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -15,19 +17,33 @@ interface UserContextProps {
 const UserContext = createContext({} as UserContextProps);
 
 function UserProvider({ children }: UserProviderProps) {
-  const [token, setToken] = useState('');
   const [user, setUser] = useState<User | null>(null);
 
   function saveUser({ token, user} : { token: string, user: User }) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    api.defaults.headers.token = `Bearer ${token}`;
     setUser(user);
-    setToken(token);
+    saveUserLocalStorage(user);
+    saveTokenLocalStorage(token);
   }
 
   function logout() {
+    removeTokenLocalStorage();
+    removeUserLocalStorage();
+    api.defaults.headers.token = null;
     setUser(null);
-    setToken('');
   }
+
+  function loadStorage() {
+    const user = getUserLocalStorage();
+    const token = getTokenLocalStorage();
+
+    setUser(user);
+    api.defaults.headers.token = `Bearer ${token}`;
+  }
+
+  useEffect(() => {
+    loadStorage();
+  }, [])
 
   return (
     <UserContext.Provider

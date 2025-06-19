@@ -1,7 +1,6 @@
-import type { InputHTMLAttributes } from "react";
-import InputComponent from "./InputComponent";
+import InputComponent, { type InputComponentProps } from "./InputComponent";
 
-interface CardInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface CardInputProps extends InputComponentProps {
   label: string
   onClick: () => void
 }

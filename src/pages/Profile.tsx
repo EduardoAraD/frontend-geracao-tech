@@ -1,8 +1,34 @@
+import { useCallback, useEffect, useState } from "react";
+
+import { useUser } from "../hooks/useUser";
+
+import { emptyAddress, type Address } from "../Model/Address";
 import Card from "../components/Card";
 import ItemLinePurchase from "../components/ItemLinePurchese";
 import Section from "../components/Section";
 
+import { getAddressUserServices } from "../services/address";
+
 const Profile = () => {
+  const { user } = useUser();
+  
+  const [address, setAddress] = useState<Address>(emptyAddress);
+
+  const loadingData = useCallback(async () => {
+    if(user === null) {
+      alert('/login');
+    } else {
+      const response = await getAddressUserServices({ id: user.id });
+      if(response !== null) {
+        setAddress(response);
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    loadingData()
+  }, [loadingData])
+
   return (
     <main>
       <Section bgColor="bg-background">
@@ -20,20 +46,20 @@ const Profile = () => {
               <Card.Title size="base">
                 Informações Pessoais
               </Card.Title>
-              <ItemLinePurchase title='Nome' value='Francisco Antonio Pereira' />
-              <ItemLinePurchase title='CPF' value='123465789-12' />
-              <ItemLinePurchase title='E-mail' value='francisco@gmail.com' />
-              <ItemLinePurchase title='Celular' value='(85) 55555-5555' />
+              <ItemLinePurchase title='Nome' value={`${user?.firstname} ${user?.surname}`} />
+              <ItemLinePurchase title='CPF' value={user?.cpf || ''} />
+              <ItemLinePurchase title='E-mail' value={user?.email || ''} />
+              <ItemLinePurchase title='Celular' value={user?.phone || ''} />
             </div>
             <Card.Line />
             <div className="flex flex-col gap-2.5">
               <Card.Title size="base">
                 Informações de Entrega
               </Card.Title>
-              <ItemLinePurchase title='Endereço' value='Rua João Pessoa, 333' />
-              <ItemLinePurchase title='Bairro' value='Centro' />
-              <ItemLinePurchase title='Cidade' value='Fortaleza, Ceará' />
-              <ItemLinePurchase title='CEP' value='433-8800' />
+              <ItemLinePurchase title='Endereço' value={address.address} />
+              <ItemLinePurchase title='Bairro' value={address.district} />
+              <ItemLinePurchase title='Cidade' value={address.city} />
+              <ItemLinePurchase title='CEP' value={address.cep} />
             </div>
           </Card>
         </div>

@@ -64,49 +64,49 @@ const Register = () => {
               <LabelInput.Label htmlFor="firstname">Primeiro nome *</LabelInput.Label>
               <LabelInput.Input
                 id="firstname" name="firstname" placeholder="Insira seu primeiro nome" required
-                value={firstname} onChange={(e) => setFirstname(e.target.value)}
+                value={firstname} onChangeText={setFirstname}
               />
             </LabelInput>
             <LabelInput>
               <LabelInput.Label htmlFor="surname">Sobrenome *</LabelInput.Label>
               <LabelInput.Input
                 id="surname" name="surname" placeholder="Insira seu nome" required
-                value={surname} onChange={(e) => setSurname(e.target.value)}
+                value={surname} onChangeText={setSurname}
               />
             </LabelInput>
             <LabelInput>
               <LabelInput.Label htmlFor="cpf">CPF *</LabelInput.Label>
               <LabelInput.Input
                 id="cpf" name="cpf" placeholder="Insira seu CPF" required
-                value={cpf} onChange={(e) => setCpf(e.target.value)}
+                value={cpf} onChangeText={setCpf}
               />
             </LabelInput>
             <LabelInput>
               <LabelInput.Label htmlFor="email">E-mail *</LabelInput.Label>
               <LabelInput.Input
                 id="email" name="email" type="email" placeholder="Insira seu email" required
-                value={email} onChange={(e) => setEmail(e.target.value)}
+                value={email} onChangeText={setEmail}
               />
             </LabelInput>
             <LabelInput>
               <LabelInput.Label htmlFor="phone">Celular *</LabelInput.Label>
               <LabelInput.Input
                 id="phone" name="phone" placeholder="Insira seu celular" required
-                value={phone} onChange={(e) => setPhone(e.target.value)}
+                value={phone} onChangeText={setPhone}
               />
             </LabelInput>
             <LabelInput>
               <LabelInput.Label htmlFor="password">Senha *</LabelInput.Label>
               <LabelInput.Input
                 id="password" name="password" type="password" placeholder="Insira seu celular" required
-                value={password} onChange={(e) => setPassword(e.target.value)}
+                value={password} onChangeText={setPassword}
               />
             </LabelInput>
             <LabelInput>
               <LabelInput.Label htmlFor="confirm_password">Confirmar Senha *</LabelInput.Label>
               <LabelInput.Input
                 id="confirm_password" name="confirm_password" type="password" placeholder="Insira seu celular" required
-                value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword} onChangeText={setConfirmPassword}
               />
             </LabelInput>
           </Card>

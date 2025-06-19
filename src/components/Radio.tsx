@@ -16,11 +16,10 @@ const Radio = ({ checked, onChecked, title }: RadioProps) => {
           <div className='w-3.5 h-3.5 bg-primary rounded-full' />
         )}
       </div>
-      <label
-        className="font-medium text-sm text-dark_gray2"
-        htmlFor="radio">
+      <span
+        className="font-medium text-sm text-dark_gray2">
         {title}
-      </label>
+      </span>
     </button>
   );
 }

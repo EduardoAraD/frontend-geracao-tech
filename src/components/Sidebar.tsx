@@ -3,6 +3,7 @@ import { Sidebar } from 'primereact/sidebar';
 
 import Button from './Button';
 import Card from './Card';
+import { useUser } from '../hooks/useUser';
 
 interface Props {
   visible: boolean;
@@ -12,6 +13,7 @@ interface Props {
 const SideBarMenu = ({ visible, onClose }: Props) => {
   const navigate = useNavigate()
   const { pathname } = useLocation();
+  const { user, logout } = useUser();
 
   function goToLogin() {
     onClose();
@@ -47,32 +49,46 @@ const SideBarMenu = ({ visible, onClose }: Props) => {
       visible={visible} onHide={() => onClose()}
     >
       <section className='flex flex-col gap-5 h-full'>
-        <h4 className='text-base font-bold text-dark_gray2'>Olá Francisco</h4>
-        <nav className='flex'>
-          <ul className='flex flex-col gap-2.5'>
-            <li><Link className='text-dark_gray2' to="/minha-conta">Minhas Informações</Link></li>
-            <li><Link className='text-dark_gray2' to="/minha-conta/metodos-de-pagamento">Métodos de Pagamento</Link></li>
-          </ul>
-        </nav>
-        <Card.Line />
+        {user !== null && (
+          <>
+            <h4 className='text-base font-bold text-dark_gray2'>Olá {user.firstname}</h4>
+            <nav className='flex'>
+              <ul className='flex flex-col gap-2.5'>
+                <li><Link className='text-dark_gray2' to="/minha-conta">Minhas Informações</Link></li>
+                <li><Link className='text-dark_gray2' to="/minha-conta/metodos-de-pagamento">Métodos de Pagamento</Link></li>
+              </ul>
+            </nav>
+            <Card.Line />
+          </>
+        )}
         <h4 className='text-base font-bold text-dark_gray2'>Páginas</h4>
         <nav className='flex flex-1'>
           <ul className='flex flex-col gap-2.5'>
             <li>{itemLink({ title: 'Home', path: '/' })}</li>
             <li>{itemLink({ title: 'Produtos', path: '/produtos' })}</li>
             <li>{itemLink({ title: 'Categorias', path: '/categorias' })}</li>
-            <li>{itemLink({ title: 'Meus Pedidos', path: '/minha-conta/meus-pedidos' })}</li>
+            {user !== null && (
+              <li>{itemLink({ title: 'Meus Pedidos', path: '/minha-conta/meus-pedidos' })}</li>
+            )}
           </ul>
         </nav>
-        <div className='flex flex-col border-t-1 border-light_gray2 gap-5 pt-5 items-center'>
-          <Button onClick={goToLogin}>
-            Entrar
-          </Button>
-          <button
-            className='text-dark_gray2 text-center border-b-1 duration-200 hover:brightness-120'
-            onClick={goToRegister}
-          >Cadastrar</button>
-        </div>
+        {user !== null ? (
+          <div className='flex flex-col border-t-1 border-light_gray2 gap-5 pt-5 items-center'>
+            <Button bgColor='warning' onClick={logout}>
+              Sair
+            </Button>
+          </div>
+        ) : (
+          <div className='flex flex-col border-t-1 border-light_gray2 gap-5 pt-5 items-center'>
+            <Button onClick={goToLogin}>
+              Entrar
+            </Button>
+            <button
+              className='text-dark_gray2 text-center border-b-1 duration-200 hover:brightness-120'
+              onClick={goToRegister}
+            >Cadastrar</button>
+          </div>
+        )}
       </section>
     </Sidebar>
   );

@@ -1,8 +1,9 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 import type { ItemCart } from "../Model/ItemCart";
 import type { Product } from "../Model/Product";
+import { getCartLocalStorage, removeCartLocalStorage, saveCartLocalStorage } from "../lib/localStorage/cart";
 
 interface CartProviderProps {
   children: ReactNode;
@@ -30,20 +31,39 @@ function CartProvider({ children }: CartProviderProps) {
       size
     }
 
-    setItems(state => [ ...state, newItemCart ])
+    const newList = [ ...items, newItemCart ];
+
+    setItems(newList)
+    saveCartLocalStorage(newList);
   }
 
   function removeProduct(idItemCart: string) {
-    setItems(state => state.filter( item => item.id !== idItemCart ));
+    const newList = items.filter( item => item.id !== idItemCart );
+
+    setItems(newList);
+    saveCartLocalStorage(newList);
   }
 
   function updateQuantityProduct({ quantity, id }: { quantity: number, id: string }) {
-    setItems(state => state.map(item => item.id === id ? ({ ...item, quantity }) : item));
+    const newList = items.map(item => item.id === id ? ({ ...item, quantity }) : item);
+
+    setItems(newList);
+    saveCartLocalStorage(newList);
   }
 
   function emptyCart() {
     setItems([]);
+    removeCartLocalStorage();
   }
+
+  function loadStorage() {
+    const itemsCart = getCartLocalStorage();
+    setItems(itemsCart);
+  }
+
+  useEffect(() => {
+    loadStorage();
+  }, [])
 
   return (
     <CartContext.Provider

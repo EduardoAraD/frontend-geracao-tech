@@ -24,12 +24,12 @@ const Paths = () => {
           <Route path="/produtos/:id" element={<ProductViewPage/>} />
           <Route path="/carrinho" element={<CartViewPage />} />
           <Route path="/confirmar-compra" element={<ConfirmadBuy />} />
-          <Route path="/compra-finalizada" element={<PurchaseCart />} />
+          <Route path="/compra-finalizada/:id" element={<PurchaseCart />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastrar" element={<Register />} />
+          <Route path="/minha-conta" element={<Profile />} />
           {/* minha conta / meus pedidos */}
           <Route path="/minha-conta/meus-pedidos" element={<MyOrders />} />
-          <Route path="/minhas-conta" element={<Profile />} />
 
           <Route path="*" element={<NotFound />} />
         </Route>

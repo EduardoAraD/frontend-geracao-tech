@@ -7,3 +7,13 @@ export interface User {
   cpf: string;
   phone: string;
 }
+
+export const emptyUser: User = {
+  id: '',
+  firstname: '',
+  surname: '',
+  email: '',
+  password: '',
+  cpf: '',
+  phone: '',
+}
