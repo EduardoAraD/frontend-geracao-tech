@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { InputIcon } from "primereact/inputicon";
 
 import type { Product } from "../Model/Product";
@@ -11,9 +12,13 @@ import SideBarFilter from "../components/SidebarFilter";
 import { getProducts } from "../services/products";
 
 const ProductListinPage = () => {
+  const [searchParams] = useSearchParams();
+
   const [products, setProducts] = useState<Product[]>([])
   const [selected, setSelected] = useState('');
   const [showFilter, setShowFilter] = useState(false);
+
+  const search = searchParams.get('search');
 
   async function loadAllProducts() {
     const list = await getProducts()
@@ -44,13 +49,15 @@ const ProductListinPage = () => {
           </button>
         </div>
 
-        <div className="flex mt-2.5 mb-5">
-          <p className="text-sm text-dark_gray2 font-medium">
-            <strong>
-              Resultados para "Tênis"
-            </strong> - 369 produtos
-          </p>
-        </div>
+        {search !== null && (
+          <div className="flex mt-2.5 mb-5">
+            <p className="text-sm text-dark_gray2 font-medium">
+              <strong>
+                Resultados para "{search}"
+              </strong> - {products.length} produtos
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
           {products.map(item => (

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { InputIcon } from 'primereact/inputicon';
 import { Sidebar } from 'primereact/sidebar';
 
+import { listGenderProductView } from '../Model/GenderProduct';
 import Checkbox from './Checkbox';
 import Radio from './Radio';
 
@@ -10,19 +11,50 @@ interface Props {
   onVisible: (value: boolean) => void
 }
 
-type GenderOptions = 'new' | 'old'
+type StateOptions = 'new' | 'old'
+const listMarks = ["Adiddas","Calenciaga","K-Swiss", "Nike", "Puma"];
+const listCategorys = ["Esporte e lazer", "Casual", "Utilitário", "Corrida"];
 
 const SideBarFilter = ({ visible, onVisible }: Props) => {
-  const [showAdiddas, setShowAdiddas] = useState(true);
-  const [filterState, setFilterState] = useState<GenderOptions | ''>('');
+  const [filterState, setFilterState] = useState<StateOptions | ''>('');
+  const [filterMarks, setFilterMarks] = useState<string[]>([]);
+  const [filterCategorys, setFilterCategorys] = useState<string[]>([]);
+  const [filterGenders, setFilterGenders] = useState<string[]>([]);
 
   //75, 36
 
-  function selectedFilterState(value: GenderOptions) {
+  function selectedFilterState(value: StateOptions) {
     if(value === filterState) {
       setFilterState('')
     } else {
       setFilterState(value);
+    }
+  }
+
+  function handleAddFilterMarks(value: string) {
+    const notHasValue = filterMarks.find(item => item === value) === undefined;
+    if(notHasValue) {
+      setFilterMarks(state => [...state, value])
+    } else {
+      setFilterMarks(state => state.filter(item => item !== value));
+    }
+  }
+
+  function handleAddFilterCategorys(value: string) {
+    const notHasValue = filterCategorys.find(item => item === value) === undefined;
+    if(notHasValue) {
+      setFilterCategorys(state => [...state, value])
+    } else {
+      setFilterCategorys(state => state.filter(item => item !== value));
+    }
+  }
+
+  function handleAddFilterGenders(value: string) {
+    const notHasValue = filterGenders.find(item => item === value) === undefined;
+    if(notHasValue) {
+      setFilterGenders(state => [...state, value])
+    } else {
+      setFilterGenders(state => state.filter(item => item !== value));
     }
   }
 
@@ -47,26 +79,38 @@ const SideBarFilter = ({ visible, onVisible }: Props) => {
 
         <div className='flex flex-col gap-5 overflow-auto pt-5 pb-2'>
           <div className='flex gap-2.5 flex-col'>
-            <h5 className='text-sm font-bold text-dark_gray2'>Marka</h5>
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Adiddas" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Calenciaga" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="K-Swiss" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Nike" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Puma" />
+            <h5 className='text-sm font-bold text-dark_gray2'>Marca</h5>
+            {listMarks.map(item => (
+              <Checkbox
+                key={item}
+                checked={!!filterMarks.find(filt => filt === item)}
+                onChecked={() => handleAddFilterMarks(item)}
+                title={item}
+              />
+            ))}
           </div>
 
           <div className='flex gap-2.5 flex-col'>
             <h5 className='text-sm font-bold text-dark_gray2'>Categoria</h5>
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Esporte e lazer" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Casual" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Utilitário" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Corrida" />
+            {listCategorys.map(item => (
+              <Checkbox
+                key={item}
+                checked={!!filterCategorys.find(filt => filt === item)}
+                onChecked={() => handleAddFilterCategorys(item)}
+                title={item}
+              />
+            ))}
           </div>
           <div className='flex gap-2.5 flex-col'>
             <h5 className='text-sm font-bold text-dark_gray2'>Gênero</h5>
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Masculino" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Feminino" />
-            <Checkbox checked={showAdiddas} onChecked={setShowAdiddas} title="Unisex" />
+            {listGenderProductView.map(item => (
+              <Checkbox
+                key={item}
+                checked={!!filterGenders.find(filt => filt === item)}
+                onChecked={() => handleAddFilterGenders(item)}
+                title={item}
+              />
+            ))}
           </div>
           <div className='flex gap-2.5 flex-col'>
             <h5 className='text-sm font-bold text-dark_gray2'>Estado</h5>

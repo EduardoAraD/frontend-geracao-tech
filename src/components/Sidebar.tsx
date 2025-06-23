@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Sidebar } from 'primereact/sidebar';
 
+import { useUser } from '../hooks/useUser';
 import Button from './Button';
 import Card from './Card';
-import { useUser } from '../hooks/useUser';
 
 interface Props {
   visible: boolean;
@@ -14,6 +15,12 @@ const SideBarMenu = ({ visible, onClose }: Props) => {
   const navigate = useNavigate()
   const { pathname } = useLocation();
   const { user, logout } = useUser();
+
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth)
+
+  const handleWindowSizeChange = () => {
+    setScreenWidth(window.innerWidth)
+  }
 
   function goToLogin() {
     onClose();
@@ -39,6 +46,19 @@ const SideBarMenu = ({ visible, onClose }: Props) => {
       </Link>
     )
   }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange)
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange)
+    }
+  }, [])
+
+  useEffect(() => {
+    if(screenWidth > 768 && visible) {
+      onClose();
+    }
+  }, [onClose, screenWidth, visible])
 
   //75, 36
   return (

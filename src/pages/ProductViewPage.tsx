@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { InputIcon } from "primereact/inputicon";
 
 import { useCart } from "../hooks/useCart";
@@ -18,7 +18,7 @@ import { getProduct, getProductByCategorys } from "../services/products";
 import { getFormatMoney } from "../utils/formatMoney";
 
 const ProductViewPage = () => {
-  const { pathname } = useLocation();
+  const { id } = useParams();
   const { addProduct } = useCart()
   
   const [product, setProduct] = useState<Product>(emptyProduct);
@@ -55,16 +55,17 @@ const ProductViewPage = () => {
   }
 
   const loadProduct = useCallback(async () => {
-    const id = pathname.split('/')[2].split('-')[0]
-    const response = await getProduct(id);
+    if(id !== undefined) {
+      const response = await getProduct(id);
 
-    if(response !== null) {
-      const listProducts = await getProductByCategorys(response.categorys.map(item => item.id))
-      setProduct(response)
-      setSimilarProducts(listProducts);
+      if(response !== null) {
+        const listProducts = await getProductByCategorys(response.categorys.map(item => item.id))
+        setProduct(response)
+        setSimilarProducts(listProducts);
+      }
+      setLoading(false)
     }
-    setLoading(false)
-  }, [pathname]);
+  }, [id]);
 
   useEffect(() => {
     loadProduct()
