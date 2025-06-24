@@ -73,7 +73,7 @@ const PurchaseCart = () => {
 
   return (
     <main>
-      <Section bgColor="bg-background pb-20">
+      <Section bgColor="bg-background" className="pb-20">
         <div className="flex flex-col w-full max-w-[720px] m-auto gap-10">
           <div id="#capture" className="flex w-full">
             <Card>

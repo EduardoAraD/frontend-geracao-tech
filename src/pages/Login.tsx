@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useUser } from "../hooks/useUser";
+
 import Button from "../components/Button";
 import LabelInput from "../components/LabelInput";
 import Section from "../components/Section";
@@ -45,13 +46,17 @@ const Login = () => {
 
   return (
     <main>
-      <Section bgColor="bg-[linear-gradient(180deg,_#B5B6F2_0%,_#EFEFFF_100%)]">
+      <Section
+        bgColor="bg-[linear-gradient(180deg,_#B5B6F2_0%,_#EFEFFF_100%)]"
+      >
         <div className="h-full flex justify-center items-center py-10">
-          <div className="flex flex-col bg-white p-7.5 gap-7.5 rounded-sm">
-            <div className="flex flex-col items-center">
-              <h2 className="font-bold text-[1.375rem] text-dark_gray">Crie sua conta</h2>
+          <div className="flex flex-col bg-white p-7.5 gap-7.5 rounded-sm max-w-[580px] w-full">
+            <div className="flex flex-col items-center md:items-start">
+              <h2 className="font-bold text-[1.375rem] text-dark_gray">
+                Acesse sua conta
+              </h2>
               <p className="font-normal text-dark_gray2 text-sm">
-                Já possui uma conta? Entre <Link to="/cadastrar" className="underline cursor-pointer">aqui</Link>.
+                Novo cliente? Então registra-se <Link to="/cadastrar" className="underline cursor-pointer">aqui</Link>.
               </p>
             </div>
             <form action={handleLogin} className="flex flex-col gap-5">
@@ -60,6 +65,7 @@ const Login = () => {
                 <LabelInput.Input
                   value={email}
                   onChangeText={setEmail}
+                  placeholder="Insira seu login ou email"
                   type="email"
                 />
               </LabelInput>
@@ -68,17 +74,18 @@ const Login = () => {
                 <LabelInput.Input
                   type="password"
                   value={password}
+                  placeholder="Insira sua senha"
                   onChangeText={setPassword}
                 />
               </LabelInput>
 
-              <button className="cursor-pointer hover:brightness-150 duration-100">
+              <button className="cursor-pointer hover:brightness-150 duration-100 md:self-start">
                 <span className="text-dark_gray2 font-medium text-sm underline">Esqueci a senha</span>
               </button>
-              <Button loading={loading} type="submit">Acessar Conta</Button>
+              <Button loading={loading} type="submit" size="large">Acessar Conta</Button>
             </form>
 
-            <div className="flex flex-col justify-center items-center gap-2.5">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-2.5 md:gap-3.5">
               <p className="font-medium text-sm text-dark_gray2">Ou faça login com</p>
               <div className="flex gap-3.5">
                 <button className="p-2.5 cursor-pointer hover:brightness-120 duration-100">

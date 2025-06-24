@@ -9,9 +9,9 @@ interface ValueCartProps {
 const ValueCart = ({ title, price, priceWithDescount }: ValueCartProps) => {
   return (
     <div className="flex items-center">
-      <p className="flex-1 text-sm text-dark_gray2 font-medium uppercase">{ title }</p>
-      <div className="flex h-7 items-center gap-2">
-        <span className="text-xs font-normal text-light_gray2 line-through">R$ {getFormatMoney(price)}</span>
+      <p className="flex-1 text-sm text-dark_gray2 font-medium uppercase md:hidden">{ title }</p>
+      <div className="flex h-7 items-center gap-2 md:flex-col md:gap-0 md:h-min">
+        <span className="text-xs md:text-sm font-normal text-light_gray2 line-through">R$ {getFormatMoney(price)}</span>
         <strong className="text-base text-dark_gray2">R$ {getFormatMoney(priceWithDescount)}</strong>
       </div>
     </div>

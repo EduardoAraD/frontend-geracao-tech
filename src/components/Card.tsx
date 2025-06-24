@@ -1,12 +1,13 @@
 import { type ReactNode } from "react";
 
 interface CardProps {
+  className?: string
   children: ReactNode
 }
 
-const Card = ({ children }: CardProps) => {
+const Card = ({ children, className }: CardProps) => {
   return (
-    <article className="flex flex-col bg-white p-7.5 gap-5 rounded-sm w-full">
+    <article className={`flex flex-col bg-white p-7.5 gap-5 rounded-sm w-full ${className}`}>
       {children}
     </article>
   );

@@ -3,13 +3,16 @@ import type { ReactNode } from "react";
 interface SectionProps {
   children: ReactNode
   bgColor?: string
+  className?: string
 }
 
-const Section = ({ children, bgColor = '' }: SectionProps) => {
+const Section = ({ children, bgColor = '', className = '' }: SectionProps) => {
   return (
-    <section className={`flex flex-col px-5 py-10 gap-2.5 ${bgColor}`}>
-      {children}
-    </section>
+    <div className={`flex w-full justify-center items-center ${bgColor}`}>
+      <section className={`flex w-full flex-col max-w-[1240px] px-5 py-10 gap-2.5 ${className}`}>
+        {children}
+      </section>
+    </div>
   );
 }
  

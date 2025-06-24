@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { InputIcon } from 'primereact/inputicon';
 
 import { useCart } from "../hooks/useCart";
+import { useUser } from "../hooks/useUser";
 
 import Button from "./Button";
 import InputSearch from "./InputSearch";
@@ -15,13 +16,23 @@ import iconCart from '../assets/mini-cart.svg';
 
 const Header = () => {
   const { items } = useCart();
+  const { user } = useUser();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const [inputActive, setInputActive] = useState(false);
   const [visibleSideBar, setVisibleSideBar] = useState(false);
   const [visibleCart, setVisibleCart] = useState(false);
 
   const quantityItemCart = items.length;
+
+  function handleGoToRegister() {
+    navigate('/cadastrar')
+  }
+
+  function handleGoToLogin() {
+    navigate('/login')
+  }
 
   return (
     <div className="flex bg-red justify-start md:h-[210px] h-[72px]">
@@ -44,14 +55,20 @@ const Header = () => {
             </div>
             <div className="md:flex flex-1 gap-8 items-center hidden">
               <InputSearch />
-              <button
-                className='text-dark_gray2 text-center duration-200 hover:brightness-120'
-              >
-                <span className="underline">Cadastrar</span>
-              </button>
-              <Button className="max-w-[120px]">
-                Entrar
-              </Button>
+              {user === null && (
+                <>
+                  <button
+                    className='text-dark_gray2 text-center duration-200 hover:brightness-120'
+                    onClick={handleGoToRegister}
+                  >
+                    <span className="underline">Cadastrar</span>
+                  </button>
+                  <Button className="max-w-[120px]" onClick={handleGoToLogin}>
+                    Entrar
+                  </Button>
+                </>
+              )}
+              
             </div>
 
             <div className="flex">
@@ -76,6 +93,12 @@ const Header = () => {
               </button>
               {visibleCart && (
                 <ModalCart onClose={() => setVisibleCart(false)} />
+              )}
+              {user !== null && (
+                <div className="md:flex hidden justify-center items-center gap-2 ml-2">
+                  <InputIcon className="pi pi-user text-primary text-lg" />
+                  <span className="text-sm font-bold text-dark_gray2">{user.firstname}</span>
+                </div>
               )}
             </div>
           </div>

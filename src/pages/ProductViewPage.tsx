@@ -56,7 +56,8 @@ const ProductViewPage = () => {
 
   const loadProduct = useCallback(async () => {
     if(id !== undefined) {
-      const response = await getProduct(id);
+      const idProduct = id.split('-')[0]
+      const response = await getProduct(idProduct);
 
       if(response !== null) {
         const listProducts = await getProductByCategorys(response.categorys.map(item => item.id))
@@ -78,93 +79,96 @@ const ProductViewPage = () => {
   return (
     <main className="pb-10 bg-background">
       <Section bgColor="bg-background">
-        <TitlePage nameProduct="Tênis Nike Revolution 6 Next Nature Masculino" />
-        {loading ? (
-          <p>Carregando ...</p>
-        ) : (
-        <div className="flex flex-col gap-2.5">
-          <div className="flex w-full relative max-w-[700px]">
-            <img className="w-full" src={imageSource} alt="" />
-            <div className="absolute w-full flex justify-between items-center h-full">
-              <button className="p-4 h-full" onClick={prevImage}>
-                <InputIcon className="pi pi-chevron-left text-md" />
-              </button>
-              <button className="p-4 h-full" onClick={nextImage}>
-                <InputIcon className="pi pi-chevron-right text-md" />
-              </button>
+        <TitlePage nameProduct={product.name} categorys={product.categorys.map(item => item.name)} />
+        <div className="flex flex-col md:flex-row w-full gap-10">
+          {loading ? (
+            <p>Carregando ...</p>
+          ) : (
+          <div className="flex flex-col gap-2.5 max-w-[700px]">
+            <div className="flex w-full relative ">
+              <img className="w-full" src={imageSource} alt="" />
+              <div className="absolute w-full flex justify-between items-center h-full">
+                <button className="p-4 h-full" onClick={prevImage}>
+                  <InputIcon className="pi pi-chevron-left text-md" />
+                </button>
+                <button className="p-4 h-full" onClick={nextImage}>
+                  <InputIcon className="pi pi-chevron-right text-md" />
+                </button>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              {product.images.map((item, index) => (
+                <button
+                  key={`${index}-${item}`}
+                  onClick={() => setIndexImage(index)}
+                  className="flex-1 max-h-24 rounded-sm cursor-pointer overflow-hidden">
+                  <img src={item} alt="" />
+                </button>
+              ))}
             </div>
           </div>
-          <div className="flex gap-2">
-            {product.images.map((item, index) => (
-              <button
-                key={`${index}-${item}`}
-                onClick={() => setIndexImage(index)}
-                className="flex-1 max-h-24 rounded-sm cursor-pointer overflow-hidden">
-                <img src={item} alt="" />
-              </button>
+          )}
+          
+          <div className="flex flex-col w-full gap-2.5">
+            <h2 className="mt-10 md:mt-0 text-2xl text-dark_gray font-bold">
+              {product.name}
+            </h2>
+            <p className="mt-2.5 text-xs font-medium text-dark_gray3">
+              {product.categorys.map(item => item.name).join(', ')} | {product.mark} | REF:{product.id}</p>
+            <div className="flex items-center gap-2.5">
+              <Stars score={product.rate} />
+              <StarScore score={product.rate} />
+              <p className="font-medium text-sm text-light_gray">(90 avaliações)</p>
+            </div>
+
+            <div className="flex items-end gap-2.5">
+              <p className="text-dark_gray2 text-base font-normal">R$ <strong><span className="text-[2rem]">{getFormatMoney(product.price_with_discount)}</span></strong></p>
+              <span className="font-normal text-base text-light_gray2 line-through mb-[7px]">
+                {getFormatMoney(product.price)}
+              </span>
+            </div>
+
+            <h4 className="text-sm font-bold text-light_gray mt-5 mb-1">
+              Descrição do produto
+            </h4>
+            <p className="text-sm font-medium text-dark_gray2">
+              {product.description}
+            </p>
+            {product.options.map(item => (
+              <OptionsProduct key={item.title}>
+                <OptionsProduct.Title title={item.title} />
+                {item.type === 'color' ? (
+                  <OptionsProduct.Colors
+                    colors={item.values}
+                    colorSelected={color}
+                    onColor={setColor}
+                  />
+                ) : (
+                  <OptionsProduct.Sizes
+                    sizes={item.values}
+                    sizeSelected={size}
+                    onSize={setSize}
+                  />
+                )}
+              </OptionsProduct>
             ))}
+
+            <Button
+              className="mt-12 md:w-[220px]"
+              bgColor="warning"
+              size='large'
+              onClick={addProductInCart}
+            >
+              COMPRAR
+            </Button>
           </div>
         </div>
-        )}
-        
-        
-        <h2 className="mt-10 text-2xl text-dark_gray font-bold">
-          {product.name}
-        </h2>
-        <p className="mt-2.5 text-xs font-medium text-dark_gray3">
-          {product.categorys.map(item => item.name).join(', ')} | {product.mark} | REF:{product.id}</p>
-        <div className="flex items-center gap-2.5">
-          <Stars score={product.rate} />
-          <StarScore score={product.rate} />
-          <p className="font-medium text-sm text-light_gray">(90 avaliações)</p>
-        </div>
-
-        <div className="flex items-end gap-2.5">
-          <p className="text-dark_gray2 text-base font-normal">R$ <strong><span className="text-[2rem]">{getFormatMoney(product.price_with_discount)}</span></strong></p>
-          <span className="font-normal text-base text-light_gray2 line-through mb-[7px]">
-            {getFormatMoney(product.price)}
-          </span>
-        </div>
-
-        <h4 className="text-sm font-bold text-light_gray mt-5 mb-1">
-          Descrição do produto
-        </h4>
-        <p className="text-sm font-medium text-dark_gray2">
-          {product.description}
-        </p>
-        {product.options.map(item => (
-          <OptionsProduct key={item.title}>
-            <OptionsProduct.Title title={item.title} />
-            {item.type === 'color' ? (
-              <OptionsProduct.Colors
-                colors={item.values}
-                colorSelected={color}
-                onColor={setColor}
-              />
-            ) : (
-              <OptionsProduct.Sizes
-                sizes={item.values}
-                sizeSelected={size}
-                onSize={setSize}
-              />
-            )}
-          </OptionsProduct>
-        ))}
-
-        <Button
-          className="mt-12"
-          bgColor="warning"
-          size='large'
-          onClick={addProductInCart}
-        >
-          COMPRAR
-        </Button>
       </Section>
 
       <Section bgColor="bg-background">
-        <TitleSection showLink />
+        <TitleSection title="Produtos Relacionados" showLink />
 
-        <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
+        <div className="flex flex-wrap gap-y-10 gap-x-2.5 md:gap-x-3.5 justify-start">
           {similarProducts.slice(0,2).map(item => (
             <ProductCard key={item.id} {...item} />
           ))}

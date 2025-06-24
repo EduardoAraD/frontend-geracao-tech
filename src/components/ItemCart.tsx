@@ -1,6 +1,8 @@
 import { InputIcon } from "primereact/inputicon";
-import ValueCart from "./ValueCart";
+
 import { useCart } from "../hooks/useCart";
+
+import ValueCart from "./ValueCart";
 
 interface ItemCartProps {
   id: string;
@@ -34,8 +36,8 @@ const ItemCart = ({ id, image, name, color, size, quantitaty, price, priceWithDe
   }
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex gap-5">
+    <div className="flex flex-col gap-5 md:flex-row">
+      <div className="flex gap-5 flex-1">
         <img
           className="object-cover rounded-xs max-h-12 h-full"
           width={70} src={image} alt=""
@@ -49,11 +51,11 @@ const ItemCart = ({ id, image, name, color, size, quantitaty, price, priceWithDe
         </div>
       </div>
       <div className="flex flex-col gap-2.5">
-        <h5 className="font-medium text-sm text-dark_gray2 uppercase">Quantidade</h5>
-        <div className="flex justify-between items-center">
+        <h5 className="font-medium text-sm text-dark_gray2 uppercase md:hidden">Quantidade</h5>
+        <div className="flex justify-between items-center gap-4">
           <button
             onClick={handleMinusQuantitaty}
-            className="flex justify-center items-center w-20 h-8 border border-light_gray2 rounded-sm duration-200 hover:brightness-110"
+            className="flex justify-center items-center w-20 h-8 md:w-8 border border-light_gray2 rounded-sm duration-200 hover:brightness-110"
           >
             <InputIcon className="pi pi-minus text-xs" />
           </button>
@@ -62,7 +64,7 @@ const ItemCart = ({ id, image, name, color, size, quantitaty, price, priceWithDe
           </p>
           <button
             onClick={handlePlusQuantity}
-            className="flex justify-center items-center w-20 h-8 border border-light_gray2 rounded-sm duration-200 hover:brightness-110"
+            className="flex justify-center items-center w-20 md:w-8 h-8 border border-light_gray2 rounded-sm duration-200 hover:brightness-110"
           >
             <InputIcon className="pi pi-plus text-xs"/>
           </button>
@@ -72,6 +74,11 @@ const ItemCart = ({ id, image, name, color, size, quantitaty, price, priceWithDe
         </button>
       </div>
       <ValueCart price={price} priceWithDescount={priceWithDescount} title="UNItário" />
+      <ValueCart
+        price={price * quantitaty}
+        priceWithDescount={priceWithDescount * quantitaty}
+        title="Total"
+      />
     </div>
   );
 }

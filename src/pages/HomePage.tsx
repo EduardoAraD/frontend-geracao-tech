@@ -35,37 +35,40 @@ const HomePage = () => {
       <Carrousel />
 
       <Section>
-        <TitleSection />
+        <TitleSection title="Coleções em destaque" />
 
-        <CollectionCard
-          image="/collection-1.png"
-          title="Novo drop Supreme"
-          descount={30}
-          onClickButton={() => navigate('/produtos')}
-        />
-        <CollectionCard
-          image="/collection-2.png"
-          title="Coleção Adidas"
-          descount={30}
-          onClickButton={() => navigate('/produtos')}
-        />
-        <CollectionCard
-          image="/collection-3.png"
-          title="Novo Beats Bass"
-          descount={30}
-          onClickButton={() => navigate('/produtos')}
-        />
+        <div className="flex flex-col md:flex-row gap-2.5">
+          <CollectionCard
+            image="/collection-1.png"
+            title="Novo drop Supreme"
+            descount={30}
+            onClickButton={() => navigate('/produtos')}
+          />
+          <CollectionCard
+            image="/collection-2.png"
+            title="Coleção Adidas"
+            descount={30}
+            onClickButton={() => navigate('/produtos')}
+          />
+          <CollectionCard
+            image="/collection-3.png"
+            title="Novo Beats Bass"
+            descount={30}
+            onClickButton={() => navigate('/produtos')}
+          />
+        </div>
+
       </Section>
 
       <Section>
-        <TitleSection />
+        <TitleSection title="Coleções em destaque" />
         <ProductOptions />
       </Section>
 
       <Section>
-        <TitleSection showLink />
+        <TitleSection title="Produtos em alta" showLink />
 
-        <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
+        <div className="flex flex-wrap gap-y-10 gap-x-2.5 md:gap-x-8 justify-center">
           {products.map(item => (
             <ProductCard key={item.id} {...item} />
           ))}
@@ -73,17 +76,18 @@ const HomePage = () => {
       </Section>
 
       {productHigh !== null && (
-        <Section bgColor="bg-white">
+        <Section bgColor="bg-white" className="flex md:flex-row md:gap-16 md:items-center">
           <div className="flex justify-center items-center h-[280px] w-[280px] m-auto rounded-full bg-[linear-gradient(180deg,_#B5B6F2_0%,_#FFFFFF_60%)]">
             <img src={productHigh.images.length > 0 ? productHigh.images[0] : '/sale.png'} className="h-full w-full object-contain rounded-full" height={280} width={280} alt="" />
           </div>
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 md:flex-1 self-center">
             <span className="text-sm font-bold text-warning">Oferta especial</span>
             <h3 className="text-3xl font-bold text-dark_gray2">
               {productHigh.name}
             </h3>
             <p className="text-sm font-medium text-dark_gray2 mt-2.5">
-              {productHigh.description}
+              {/* {productHigh.description} */}
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
             </p>
             <div className="mt-5 w-52">
               <Button

@@ -4,6 +4,7 @@ import { InputIcon } from "primereact/inputicon";
 
 import type { Product } from "../Model/Product";
 
+import FilterProducts from "../components/FilterProducts";
 import ProductCard from "../components/ProductCard";
 import Section from "../components/Section";
 import Select from "../components/Select";
@@ -32,37 +33,45 @@ const ProductListinPage = () => {
 
   return (
     <main className="flex flex-col bg-light_gray3 flex-1 pb-15">
-      <SideBarFilter visible={showFilter} onVisible={setShowFilter} />
+      <SideBarFilter visible={showFilter} onClose={() => setShowFilter(false)} />
       <Section>
-        <div className="flex gap-2.5">
-          <Select
-            placeholder="Escolher ordem de relevancia"
-            value={selected}
-            onChangeText={setSelected}
-          />
-          <button
-            onClick={() => setShowFilter(true)}
-            className="flex justify-center items-center h-15 w-15 rounded-[10px] duration-200 bg-primary hover:brightness-120 cursor-pointer">
-            <InputIcon
-              className="pi pi-filter text-white text-2xl"
+        <div className="flex md:flex-row-reverse flex-col justify-between gap-5">
+          <div className="flex gap-2.5">
+            <Select
+              placeholder="Escolher ordem de relevancia"
+              value={selected}
+              onChangeText={setSelected}
             />
-          </button>
+            <button
+              onClick={() => setShowFilter(true)}
+              className="flex md:hidden justify-center items-center h-15 w-15 rounded-[10px] duration-200 bg-primary hover:brightness-120 cursor-pointer">
+              <InputIcon
+                className="pi pi-filter text-white text-2xl"
+              />
+            </button>
+          </div>
+          {search !== null && (
+            <div className="flex mt-2.5 mb-5">
+              <p className="text-sm text-dark_gray2 font-medium">
+                <strong>
+                  Resultados para "{search}"
+                </strong> - {products.length} produtos
+              </p>
+            </div>
+          )}
         </div>
 
-        {search !== null && (
-          <div className="flex mt-2.5 mb-5">
-            <p className="text-sm text-dark_gray2 font-medium">
-              <strong>
-                Resultados para "{search}"
-              </strong> - {products.length} produtos
-            </p>
+        <div className="flex gap-7">
+          <div className="md:flex hidden">
+            <FilterProducts onClose={() => {}} />
           </div>
-        )}
+          
 
-        <div className="flex flex-wrap gap-y-10 gap-x-2.5 justify-between">
-          {products.map(item => (
-            <ProductCard key={item.id} {...item} />
-          ))}
+          <div className="flex flex-wrap gap-y-10 gap-x-2.5 md:gap-x-3.5 justify-center">
+            {products.map(item => (
+              <ProductCard key={item.id} {...item} />
+            ))}
+          </div>
         </div>
       </Section>
     </main>

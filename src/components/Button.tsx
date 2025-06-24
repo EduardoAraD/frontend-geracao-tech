@@ -14,7 +14,7 @@ const Button = ({ children, bgColor = 'primary', size = 'normal', className, loa
       disabled={loading || disabled}
       {...rest}
     >
-      <p className="text-sm text-light_gray3 font-bold">
+      <p className="text-sm md:text-base text-light_gray3 font-bold">
         {children}
       </p>
     </button>

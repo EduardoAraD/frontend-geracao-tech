@@ -123,195 +123,209 @@ const ConfirmadBuy = () => {
       <form action={handleCreatePurchase}>
         <Section bgColor="bg-background">
           <h2 className="text-lg font-bold text-dark_gray mb-2.5">Finalizar Compra</h2>
-          <Card>
-            <Card.Title>Informações Pessoais</Card.Title>
-            <Card.Line />
-            <LabelInput>
-              <LabelInput.Label htmlFor="name">Nome Completo *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu nome"
-                id="name"
-                name="name"
-                autoComplete="name"
-                value={name}
-                onChangeText={setName}
-                required
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="cpf">CPF *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu CPF"
-                id="cpf" name="cpf" required
-                value={cpf} onChangeText={setCpf}
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="email">E-mail *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu email"
-                id="email" name="email"
-                type="email" required
-                autoComplete='home email'
-                value={email} onChangeText={setEmail}
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="phone">Celular *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu celular"
-                id="phone" name="phone"
-                type='tel'
-                autoComplete='tel'
-                required
-                value={phone} onChangeText={setPhone}
-              />
-            </LabelInput>
-          </Card>
-          <Card>
-            <Card.Title>Informações de Entrega</Card.Title>
-            <Card.Line />
-            <LabelInput>
-              <LabelInput.Label htmlFor="street">Endereço *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu endereço"
-                id="street" name="street"
-                autoComplete='street-address'
-                required
-                value={street} onChangeText={setStreet}
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="district">Bairro *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu bairro"
-                id="district" name="district"
-                required
-                value={district} onChangeText={setDistrict}
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="city">Cidade *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu Cidade"
-                id="city" name="city"
-                required
-                value={city} onChangeText={setCity}
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="cep">Cep *</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira seu Cep"
-                id="cep" name="cep"
-                type="number"
-                required
-                value={cep} onChangeText={setCep}
-              />
-            </LabelInput>
-            <LabelInput>
-              <LabelInput.Label htmlFor="complement">Complemento</LabelInput.Label>
-              <LabelInput.Input
-                placeholder="Insira complemento"
-                id="complement" name="complement"
-                value={complement} onChangeText={setComplement}
-              />
-            </LabelInput>
-          </Card>
-
-          <Card>
-            <Card.Title>Informações de Pagamento</Card.Title>
-            <Card.Line />
-            <LabelInput>
-              <LabelInput>Forma de Pagamento</LabelInput>
-              <div className="flex flex-col gap-5 mt-4">
-                <Radio
-                  checked={typePayment === 'card'}
-                  onChecked={() => setTypePayment('card')}
-                  title="Cartão de Crédito"
-                />
-                <Radio
-                  checked={typePayment === 'billet'}
-                  onChecked={() => setTypePayment('billet')}
-                  title="Boleto bancário"
-                />
-              </div>
-            </LabelInput>
-            {typePayment === 'card' && (
-              <>
+          <div className="flex gap-5 md:flex-row flex-col">
+            <div className="flex flex-col w-full gap-2.5 max-w-[750px]">
+              <Card>
+                <Card.Title>Informações Pessoais</Card.Title>
+                <Card.Line />
                 <LabelInput>
-                  <LabelInput.Label htmlFor="nameCard">Nome do Cartão *</LabelInput.Label>
+                  <LabelInput.Label htmlFor="name">Nome Completo *</LabelInput.Label>
                   <LabelInput.Input
-                    placeholder="Insira o nome do Cartão"
-                    id="nameCard" name="nameCard"
-                    required={typePayment === 'card'}
-                    value={nameCard} onChangeText={setNameCard}
+                    placeholder="Insira seu nome"
+                    id="name"
+                    name="name"
+                    autoComplete="name"
+                    value={name}
+                    onChangeText={setName}
+                    required
                   />
                 </LabelInput>
                 <LabelInput>
-                  <LabelInput.Label htmlFor="numberCard">Data o Número do Cartão *</LabelInput.Label>
+                  <LabelInput.Label htmlFor="cpf">CPF *</LabelInput.Label>
                   <LabelInput.Input
-                    placeholder="Insira o número do Cartão"
-                    id="numberCard" name="numberCard"
-                    required={typePayment === 'card'}
-                    value={numberCard} onChangeText={setNumberCard}
+                    placeholder="Insira seu CPF"
+                    id="cpf" name="cpf" required
+                    value={cpf} onChangeText={setCpf}
                   />
                 </LabelInput>
                 <LabelInput>
-                  <LabelInput.Label htmlFor="validity">Data de validade do Cartão *</LabelInput.Label>
+                  <LabelInput.Label htmlFor="email">E-mail *</LabelInput.Label>
                   <LabelInput.Input
-                    placeholder="Insira a validade do Cartão"
-                    id="validity" name="validity"
-                    required={typePayment === 'card'}
-                    value={dateValidity} onChangeText={setDateValidity}
+                    placeholder="Insira seu email"
+                    id="email" name="email"
+                    type="email" required
+                    autoComplete='home email'
+                    value={email} onChangeText={setEmail}
                   />
                 </LabelInput>
                 <LabelInput>
-                  <LabelInput.Label htmlFor="cvv">CVV *</LabelInput.Label>
+                  <LabelInput.Label htmlFor="phone">Celular *</LabelInput.Label>
                   <LabelInput.Input
-                    placeholder="CVV *"
-                    id="cvv" name="cvv"
+                    placeholder="Insira seu celular"
+                    id="phone" name="phone"
+                    type='tel'
+                    autoComplete='tel'
+                    required
+                    value={phone} onChangeText={setPhone}
+                  />
+                </LabelInput>
+              </Card>
+              <Card>
+                <Card.Title>Informações de Entrega</Card.Title>
+                <Card.Line />
+                <LabelInput>
+                  <LabelInput.Label htmlFor="street">Endereço *</LabelInput.Label>
+                  <LabelInput.Input
+                    placeholder="Insira seu endereço"
+                    id="street" name="street"
+                    autoComplete='street-address'
+                    required
+                    value={street} onChangeText={setStreet}
+                  />
+                </LabelInput>
+                <LabelInput>
+                  <LabelInput.Label htmlFor="district">Bairro *</LabelInput.Label>
+                  <LabelInput.Input
+                    placeholder="Insira seu bairro"
+                    id="district" name="district"
+                    required
+                    value={district} onChangeText={setDistrict}
+                  />
+                </LabelInput>
+                <LabelInput>
+                  <LabelInput.Label htmlFor="city">Cidade *</LabelInput.Label>
+                  <LabelInput.Input
+                    placeholder="Insira seu Cidade"
+                    id="city" name="city"
+                    required
+                    value={city} onChangeText={setCity}
+                  />
+                </LabelInput>
+                <LabelInput>
+                  <LabelInput.Label htmlFor="cep">Cep *</LabelInput.Label>
+                  <LabelInput.Input
+                    placeholder="Insira seu Cep"
+                    id="cep" name="cep"
                     type="number"
-                    required={typePayment === 'card'}
-                    value={cvv} onChangeText={setCvv}
+                    required
+                    value={cep} onChangeText={setCep}
                   />
                 </LabelInput>
-              </>
-            )}
-          </Card>
-          <Card>
-            <Card.Title>RESUMO</Card.Title>
-            <Card.Line />
-            <div className="flex gap-5">
-              <img
-                className="object-cover rounded-xs max-h-12 h-full"
-                width={70} src="/produc-image-1.jpeg" alt=""
-              />
-              <strong className="flex-1 text-sm pb-2.5 text-dark_gray">
-                Tênis Nike Revolution 6 Next Nature Masculino
-              </strong>
-            </div>
-            <Card.Line />
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-light_gray">Subtotal:</span>
-              <span className="text-sm font-medium text-light_gray">R$ {getFormatMoney(totalWithDescount)}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-light_gray">Frete:</span>
-              <span className="text-sm font-medium text-light_gray">R$ 0,00</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-light_gray">Desconto:</span>
-              <span className="text-sm font-medium text-light_gray">R$ 30,00</span>
-            </div>
-            <BuyBox total={total} />
+                <LabelInput>
+                  <LabelInput.Label htmlFor="complement">Complemento</LabelInput.Label>
+                  <LabelInput.Input
+                    placeholder="Insira complemento"
+                    id="complement" name="complement"
+                    value={complement} onChangeText={setComplement}
+                  />
+                </LabelInput>
+              </Card>
 
-            <Button bgColor="warning" type="submit">
-              Realizar Pagamento
-            </Button>
-          </Card>
+              <Card>
+                <Card.Title>Informações de Pagamento</Card.Title>
+                <Card.Line />
+                <LabelInput>
+                  <LabelInput>Forma de Pagamento</LabelInput>
+                  <div className="flex flex-col gap-5 mt-4">
+                    <Radio
+                      checked={typePayment === 'card'}
+                      onChecked={() => setTypePayment('card')}
+                      title="Cartão de Crédito"
+                    />
+                    <Radio
+                      checked={typePayment === 'billet'}
+                      onChecked={() => setTypePayment('billet')}
+                      title="Boleto bancário"
+                    />
+                  </div>
+                </LabelInput>
+                {typePayment === 'card' && (
+                  <>
+                    <LabelInput>
+                      <LabelInput.Label htmlFor="nameCard">Nome do Cartão *</LabelInput.Label>
+                      <LabelInput.Input
+                        placeholder="Insira o nome do Cartão"
+                        id="nameCard" name="nameCard"
+                        required={typePayment === 'card'}
+                        value={nameCard} onChangeText={setNameCard}
+                      />
+                    </LabelInput>
+                    <LabelInput>
+                      <LabelInput.Label htmlFor="numberCard">Data o Número do Cartão *</LabelInput.Label>
+                      <LabelInput.Input
+                        placeholder="Insira o número do Cartão"
+                        id="numberCard" name="numberCard"
+                        required={typePayment === 'card'}
+                        value={numberCard} onChangeText={setNumberCard}
+                      />
+                    </LabelInput>
+                    <LabelInput>
+                      <LabelInput.Label htmlFor="validity">Data de validade do Cartão *</LabelInput.Label>
+                      <LabelInput.Input
+                        placeholder="Insira a validade do Cartão"
+                        id="validity" name="validity"
+                        required={typePayment === 'card'}
+                        value={dateValidity} onChangeText={setDateValidity}
+                      />
+                    </LabelInput>
+                    <LabelInput>
+                      <LabelInput.Label htmlFor="cvv">CVV *</LabelInput.Label>
+                      <LabelInput.Input
+                        placeholder="CVV *"
+                        id="cvv" name="cvv"
+                        type="number"
+                        required={typePayment === 'card'}
+                        value={cvv} onChangeText={setCvv}
+                      />
+                    </LabelInput>
+                  </>
+                )}
+              </Card>
+
+              <Card>
+                <Card.Title>Finalizar Compra</Card.Title>
+                <Card.Line />
+                <BuyBox total={total} />
+                <Button bgColor="warning" type="submit">
+                  Realizar Pagamento
+                </Button>
+              </Card>
+            </div>
+
+            <Card className="md:max-w-[480px] h-min">
+              <Card.Title>RESUMO</Card.Title>
+              <Card.Line />
+              <div className="flex gap-5">
+                <img
+                  className="object-cover rounded-xs max-h-12 h-full"
+                  width={70} src="/produc-image-1.jpeg" alt=""
+                />
+                <strong className="flex-1 text-sm pb-2.5 text-dark_gray">
+                  Tênis Nike Revolution 6 Next Nature Masculino
+                </strong>
+              </div>
+              <Card.Line />
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-light_gray">Subtotal:</span>
+                <span className="text-sm font-medium text-light_gray">R$ {getFormatMoney(totalWithDescount)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-light_gray">Frete:</span>
+                <span className="text-sm font-medium text-light_gray">R$ 0,00</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-light_gray">Desconto:</span>
+                <span className="text-sm font-medium text-light_gray">R$ 0,00</span>
+              </div>
+              <BuyBox total={total} />
+
+              <Button bgColor="warning" type="submit">
+                Realizar Pagamento
+              </Button>
+            </Card>
+          </div>
         </Section>
-        <section className="flex flex-col bg-white p-7.5 gap-5 rounded-sm">
+        <section className="flex md:hidden flex-col bg-white p-7.5 gap-5 rounded-sm">
           <BuyBox total={total} />
 
           <Button bgColor="warning" type="submit">Realizar Pagamento</Button>

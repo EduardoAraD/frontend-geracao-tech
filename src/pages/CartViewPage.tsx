@@ -1,27 +1,31 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../hooks/useCart";
 
+import type { Product } from "../Model/Product";
 import Button from "../components/Button";
 import BuyBox from "../components/BuyBox";
 import Card from "../components/Card";
 import CardInput from "../components/CardInput";
-import ItemCart from "../components/ItemCart";
+import ItemCart from "../components/ItemCart"
+import ProductCard from "../components/ProductCard";
 import Section from "../components/Section";
-import ValueCart from "../components/ValueCart";
+import TitleSection from "../components/TitleSection";
 
+import { getProducts } from "../services/products";
 import { getFormatMoney } from "../utils/formatMoney";
 
 const CartViewPage = () => {
   const { items } = useCart();
   const navigate = useNavigate()
 
+  const [products, setProducts] = useState<Product[]>([])
   const [cep, setCep] = useState('')
   // const [descount, setDescount] = useState(0)
   // const [priceFreigh, setPriceFreigh] = useState(0)
 
-  const { totalPrice, totalWithDescount } = useMemo(() => {
+  const { totalWithDescount } = useMemo(() => {
     const initialValue = 0;
 
     const totalPrice = items.reduce(
@@ -60,11 +64,31 @@ const CartViewPage = () => {
     navigate('/confirmar-compra')
   }
 
+  async function loadAllProducts() {
+    const list = await getProducts()
+
+    setProducts(list)
+  }
+
+  useEffect(() => {
+    loadAllProducts();
+  }, [])
+
   return (
     <main>
-      <Section bgColor="bg-background">
-        <Card>
-          <Card.Title>MEU CARRINHO</Card.Title>
+      <Section bgColor="bg-background" className="lg:flex-row">
+        <Card className="max-w-[890px]">
+          <div className="md:flex hidden justify-between">
+            <h3 className={`text-sm text-dark_gray2 font-bold`}>MEU CARRINHO</h3>
+            <div className="flex gap-8 items-center mr-4">
+              <span className="text-sm text-dark_gray2 font-medium">QUANTIDADE</span>
+              <span className="text-sm text-dark_gray2 font-medium">UNITÁRIO</span>
+              <span className="text-sm text-dark_gray2 font-medium">TOTAL</span>
+            </div>
+          </div>
+          <div className="md:hidden flex">
+            <Card.Title>MEU CARRINHO</Card.Title>
+          </div>
           <Card.Line />
           {items.map(item => (
             <ItemCart
@@ -80,11 +104,25 @@ const CartViewPage = () => {
               stock={item.product.stock}
             />
           ))}
-
-          <ValueCart title="Total" price={totalPrice} priceWithDescount={totalWithDescount} />
+          <div className="hidden gap-8 md:flex border-t border-light_gray2 pt-5">
+            <CardInput
+              id="discount_coupon"
+              label="Cupom de desconto"
+              onClick={() => {}}
+              placeholder="Insira seu código"
+            />
+            <CardInput
+              id="freight"
+              label="Calculo do frete"
+              value={cep}
+              onChangeText={setCep}
+              onClick={handleGetValueFreight}
+              placeholder="Insira seu CEP"
+            />
+          </div>
         </Card>
 
-        <Card>
+        <Card className="md:hidden">
           <CardInput
             id="discount_coupon"
             label="Cupom de desconto"
@@ -93,7 +131,7 @@ const CartViewPage = () => {
           />
         </Card>
 
-        <Card>
+        <Card className="md:hidden">
           <CardInput
             id="freight"
             label="Calculo do frete"
@@ -104,7 +142,7 @@ const CartViewPage = () => {
           />
         </Card>
 
-        <Card>
+        <Card className="md:max-w-[260px]">
           <Card.Title>RESUMO</Card.Title>
           <Card.Line />
           <div className="flex justify-between items-center">
@@ -120,9 +158,17 @@ const CartViewPage = () => {
             <span className="text-sm font-medium text-light_gray">R$ {getFormatMoney(0)}</span>
           </div>
           <BuyBox total={total} />
+
+          <Button
+            bgColor="warning"
+            className="md:flex hidden"
+            onClick={handleConfirmCart}
+          >
+            Continuar
+          </Button>
         </Card>
       </Section>
-      <section className="flex flex-col bg-white p-7.5 gap-5 rounded-sm">
+      <section className="md:hidden flex flex-col bg-white p-7.5 gap-5 rounded-sm">
         <BuyBox total={total} />
 
         <Button
@@ -132,6 +178,15 @@ const CartViewPage = () => {
           Continuar
         </Button>
       </section>
+      <Section bgColor="bg-background" className="md:flex hidden">
+        <TitleSection title="Produtos Relacionados" showLink />
+
+        <div className="flex flex-wrap gap-y-10 gap-x-2.5 md:gap-x-3.5 justify-start">
+          {products.slice(0,2).map(item => (
+            <ProductCard key={item.id} {...item} />
+          ))}
+        </div>
+      </Section>
     </main>
   );
 }

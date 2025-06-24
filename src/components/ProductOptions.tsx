@@ -1,9 +1,10 @@
+import { ReactSVG } from 'react-svg'
+
 import shirtSvg from '../assets/tshirt.svg';
 import pantsSvg from '../assets/pants.svg';
 import hatSvg from '../assets/hat.svg';
 import shoesSvg from '../assets/shoes.svg';
 import headphoneSvg from '../assets/headphone.svg';
-import { ReactSVG } from 'react-svg'
 
 interface Option {
   id: number;
@@ -32,10 +33,8 @@ const ProductOptions = () => {
   }
 
   return (
-    <div className='flexc overflow-hidden' style={{ marginLeft: -20, marginRight: -20 }}>
-      <div className='flex overflow-scroll gap-5 pl-5 pr-5'>
-        {options.map(item => itemOption(item))}
-      </div>
+    <div className='flex flex-wrap justify-center items-center gap-5 pl-5 pr-5'>
+      {options.map(item => itemOption(item))}
     </div>
   );
 }

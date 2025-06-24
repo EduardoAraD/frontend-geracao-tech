@@ -19,7 +19,7 @@ const Select = ({ placeholder, value, onChangeText }: SelectProps) => {
   }
 
   return (
-    <div className='flex flex-1 flex-col relative'>
+    <div className='flex flex-1 flex-col relative h-15'>
       <button
         onClick={() => setVisibleOption(!visibleOption)}
         className="flex flex-1 h-15 border-dark_gray2 border-1 px-3.5 justify-between items-center gap-1 rounded-lg">

@@ -7,9 +7,9 @@ import logoTwitter from '../assets/twitter.svg';
 
 const Footer = () => {
   return (
-    <footer className="bg-dark_gray2 px-5 py-12">
-      <section className="flex flex-col gap-10">
-        <div className="pt-1 flex flex-col gap-5">
+    <footer className="bg-dark_gray2 px-5 py-12 flex flex-col items-center">
+      <section className="flex flex-col md:flex-row gap-10 w-full max-w-[1240px]">
+        <div className="pt-1 flex flex-col gap-5 flex-1/2">
           <div className="flex items-startjustify-items-start w-auto">
             <Logo height={29} color="WHITE" />
           </div>
@@ -29,7 +29,7 @@ const Footer = () => {
             </Link>
           </div>
         </div>
-        <div className="flex gap-8">
+        <div className="flex gap-8 flex-1/2">
           <div className="flex flex-1 flex-col">
             <h4 className="text-lg text-white font-semibold">Informação</h4>
             <ul className="mt-2.5 flex flex-col gap-1">
@@ -52,7 +52,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 flex-1/3">
           <h4 className="text-lg text-white font-semibold">Contato</h4>
           <p className="text-white font-normal">
             Av. Santos Dumont, 1510 - 1 andar - Aldeota, Fortaleza - CE, 60150-161
@@ -60,7 +60,7 @@ const Footer = () => {
           <p className="text-white mt-5">(85) 3051-3411</p>
         </div>
       </section>
-      <div className="flex mt-10 border-t-1 border-white justify-center">
+      <div className="flex mt-10 w-full max-w-[1240px] border-t-1 border-white justify-center">
         <p className="mt-6 text-sm font-light text-white">
           @2022 Digital College
         </p>
@@ -68,5 +68,5 @@ const Footer = () => {
     </footer>
   );
 }
- 
+
 export default Footer;
