@@ -95,10 +95,10 @@ const Header = () => {
                 <ModalCart onClose={() => setVisibleCart(false)} />
               )}
               {user !== null && (
-                <div className="md:flex hidden justify-center items-center gap-2 ml-2">
+                <Link to='/minha-conta' className="md:flex hidden justify-center items-center gap-2 ml-2">
                   <InputIcon className="pi pi-user text-primary text-lg" />
                   <span className="text-sm font-bold text-dark_gray2">{user.firstname}</span>
-                </div>
+                </Link>
               )}
             </div>
           </div>
@@ -120,6 +120,11 @@ const Header = () => {
               <li>
                 <ItemLinkNav title="Categorias" path="/categorias" isActive={"/categorias" === pathname} />
               </li>
+              {user !== null && (
+                <li>
+                  <ItemLinkNav title="Meus Pedidos" path="/minha-conta/meus-pedidos" isActive={"/minha-conta/meus-pedidos" === pathname} />
+                </li>
+              )}
             </ul>
           </nav>
         </header>

@@ -13,13 +13,13 @@ export async function createPurchaseServices(data: Purchase) {
   }
 }
 
-export async function getPurchasesByUserIdServices({ id }: { id: string }) {
+export async function getPurchasesByUserIdServices({ id }: { id: string }): Promise<PurchaseApi[]> {
   try {
     const response = await api.get(`/purchase/user/${id}`);
 
-    console.log(response.data);
+    const { purchases } = response.data;
 
-    return [];
+    return purchases;
   } catch (error) {
     console.log(error);
 

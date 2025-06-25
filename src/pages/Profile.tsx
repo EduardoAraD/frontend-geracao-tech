@@ -4,6 +4,7 @@ import { useUser } from "../hooks/useUser";
 
 import { emptyAddress, type Address } from "../Model/Address";
 import Card from "../components/Card";
+import CardMyProfile from "../components/CardMyProfile";
 import ItemLinePurchase from "../components/ItemLinePurchese";
 import Section from "../components/Section";
 
@@ -32,7 +33,8 @@ const Profile = () => {
   return (
     <main>
       <Section bgColor="bg-background">
-        <div className="mt-5 mb-10">
+        <div className="mt-5 mb-10 md:flex md:gap-4">
+          <CardMyProfile />
           <Card>
             <div className="flex justify-between">
               <h3 className="font-bold text-sm text-dark_gray2">Minhas informações</h3>

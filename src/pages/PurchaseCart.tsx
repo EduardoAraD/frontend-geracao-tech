@@ -45,6 +45,10 @@ const PurchaseCart = () => {
       })
   }
 
+  function handleGoHome() {
+    navigate('/')
+  }
+
   useEffect(() => {
     loadPurchase()
   }, [loadPurchase])
@@ -157,7 +161,7 @@ const PurchaseCart = () => {
             </Card>
           </div>
 
-          <Button size="large" bgColor="warning">
+          <Button size="large" bgColor="warning" onClick={handleGoHome}>
             Voltar para Home
           </Button>
         </div>

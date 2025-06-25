@@ -1,4 +1,5 @@
 export type TypePayment = 'card' | 'billet';
+export type TypeStatusPurchase = 'cancel' | 'finish' | 'transit' | 'packed';
 
 export interface Purchase {
   user_id: string;
@@ -26,6 +27,7 @@ export interface Purchase {
 export interface PurchaseApi {
   id: number;
   ref: string;
+  status: TypeStatusPurchase;
   type_payment: TypePayment;
   products: {
     id: number;
@@ -51,6 +53,7 @@ export interface PurchaseApi {
 export const purchaseApiEmpty: PurchaseApi = {
   id: -1,
   ref: '',
+  status: 'cancel',
   type_payment: 'billet',
   products: [],
   address: '',
