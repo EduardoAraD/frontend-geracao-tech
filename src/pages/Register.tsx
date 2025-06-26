@@ -27,7 +27,6 @@ const Register = () => {
   async function handleSubmitFormData() {
     try {
       setLoading(true);
-      event.preventDefault();
 
       const objUser = {
         firstname,

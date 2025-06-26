@@ -46,15 +46,18 @@ const PurchaseCart = () => {
   }, [id, navigate, user])
 
   function screenPage() {
-    html2canvas(document.getElementById('#capture'))
-      .then(canvas => {
-        const dataURL = canvas.toDataURL('image/png');
+    const htmlDocumentIdElement = document.getElementById('#capture');
+    if(htmlDocumentIdElement !== null) {
+      html2canvas(htmlDocumentIdElement)
+        .then(canvas => {
+          const dataURL = canvas.toDataURL('image/png');
 
-        const link = document.createElement('a');
-        link.download = `recibo.png`;
-        link.href = dataURL;
-        link.click();
-      })
+          const link = document.createElement('a');
+          link.download = `recibo.png`;
+          link.href = dataURL;
+          link.click();
+        })
+    }
   }
 
   function handleGoHome() {

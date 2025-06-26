@@ -19,9 +19,7 @@ const Profile = () => {
 
   const loadingData = useCallback(async () => {
     try {
-      if(user === null) {
-        alert('/login');
-      } else {
+      if(user !== null) {
         const response = await getAddressUserServices({ id: user.id });
         if(response !== null) {
           setAddress(response);

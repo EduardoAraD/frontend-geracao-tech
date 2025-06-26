@@ -42,7 +42,7 @@ interface ModalCartProps {
 const ModalCart = ({ onClose }: ModalCartProps) => {
   const { items, emptyCart } = useCart()
   const navigate = useNavigate()
-  const op = useRef(null);
+  const op = useRef<HTMLDivElement>(null);
 
   const isEmptyCart = items.length <= 0;
 
