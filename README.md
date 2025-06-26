@@ -1,54 +1,52 @@
-# React + TypeScript + Vite
+# Frontend Geração Tech
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/EduardoAraD/frontend-geracao-tech/blob/main/LICENSE)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Sobre o projeto
 
-Currently, two official plugins are available:
+https://frontend-geracao-tech.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+O projeto **[Digital Store](https://frontend-geracao-tech.vercel.app/)** é um projeto de trabalho final do curso Geração Tech.
 
-## Expanding the ESLint configuration
+# Estrutura
+- **assets** -> imagens auxiliares
+- **components** -> componentes de reuso no sistema
+- **contexts** -> "Cart" e "User" são os objetos que são compartilhados no sistema
+- **hooks** -> são as funções onde se obtem os elemetos do context
+- **layouts** -> Configuração padrão para o Desing inicial das paginas.
+- **lib** -> local onde foi locado as funções específicas de algumas bibliotecas como: AsynStorage
+- **Model** -> interfaces do sistema
+- **pages** -> local dos arquivos de cada pagina do sistema
+- **routes** -> local dos arquivos de configuração das paginas
+- **services** -> local dos arquivos de api utilizadas pelo sistema
+- **styles** -> contem arquivos de configuração de estilos do sistema
+- **utils** -> algumas funções utilitárias usadas pelo sistema.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Tecnologias utilizadas
+## Front end
+- TypeScript
+- React JS
+- PrimeReact
+- Tailwind CSS
+- React Router
+- Axios
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+# Como executar o projeto
+Pré-requisitos: npm / yarn
+
+```bash
+# clonar repositório
+git clone https://github.com/EduardoAraD/frontend-geracao-tech.git
+
+# instalar dependências
+npm install
+
+# executar o projeto
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Autor
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Carlos Eduardo Araújo Duarte
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+https://www.linkedin.com/in/eduardo-araujo-2a679a176/
+
