@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import html2canvas from 'html2canvas';
+import { toast } from 'react-toastify';
 
 import { useUser } from '../hooks/useUser';
 
@@ -12,6 +13,7 @@ import Section from "../components/Section";
 
 import { getPurchaseByRefServices } from '../services/purchase';
 import { getFormatMoney } from '../utils/formatMoney';
+import { AppError } from '../utils/AppError';
 
 const PurchaseCart = () => {
   const { user } = useUser();
@@ -21,15 +23,25 @@ const PurchaseCart = () => {
   const [purchase, setPurchase] = useState<PurchaseApi>(purchaseApiEmpty)
 
   const loadPurchase = useCallback(async () => {
-    if(user !== null) {
-      if(id === undefined) {
-        navigate('/')
-        return ;
+    try {
+      if(user !== null) {
+        if(id === undefined) {
+          navigate('/')
+          return ;
+        }
+        const response = await getPurchaseByRefServices({ ref: id });
+        if(response !== null) {
+          setPurchase(response);
+        }
       }
-      const response = await getPurchaseByRefServices({ ref: id });
-      if(response !== null) {
-        setPurchase(response);
-      }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar os dados do usuário para o formulário.'
+      
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
     }
   }, [id, navigate, user])
 

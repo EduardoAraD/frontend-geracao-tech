@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { InputIcon } from "primereact/inputicon";
+import { toast } from "react-toastify";
 
 import type { Product } from "../Model/Product";
 
@@ -11,6 +12,7 @@ import Select from "../components/Select";
 import SideBarFilter from "../components/SidebarFilter";
 
 import { getProducts } from "../services/products";
+import { AppError } from "../utils/AppError";
 
 const ProductListinPage = () => {
   const [searchParams] = useSearchParams();
@@ -22,9 +24,19 @@ const ProductListinPage = () => {
   const search = searchParams.get('search');
 
   async function loadAllProducts() {
-    const list = await getProducts()
+    try {
+      const list = await getProducts()
 
-    setProducts(list)
+      setProducts(list)
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar os produtos.'
+
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+    }
   }
 
   useEffect(() => {

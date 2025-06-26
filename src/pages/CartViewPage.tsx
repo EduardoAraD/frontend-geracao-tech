@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { useCart } from "../hooks/useCart";
 
@@ -13,8 +14,9 @@ import ProductCard from "../components/ProductCard";
 import Section from "../components/Section";
 import TitleSection from "../components/TitleSection";
 
-import { getProducts } from "../services/products";
+import { getSomeProducts } from "../services/products";
 import { getFormatMoney } from "../utils/formatMoney";
+import { AppError } from "../utils/AppError";
 
 const CartViewPage = () => {
   const { items } = useCart();
@@ -61,18 +63,37 @@ const CartViewPage = () => {
   }
 
   async function handleConfirmCart() {
-    navigate('/confirmar-compra')
+    if(items.length > 0) {
+      navigate('/confirmar-compra')
+    } else {
+      toast.info("Sem item no carrinho!", {
+        autoClose: 3000,
+        theme: 'colored',
+      })
+    }
   }
 
   async function loadAllProducts() {
-    const list = await getProducts()
+    try {
+      const list = await getSomeProducts()
 
-    setProducts(list)
+      setProducts(list);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar produtos similares.'
+      
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+    }
   }
 
   useEffect(() => {
     loadAllProducts();
   }, [])
+
+  const isEmptyCart = items.length <= 0;
 
   return (
     <main>
@@ -90,6 +111,11 @@ const CartViewPage = () => {
             <Card.Title>MEU CARRINHO</Card.Title>
           </div>
           <Card.Line />
+          {isEmptyCart && (
+            <p className="text-dark_gray3 font-bold text-center">
+              Carrinho vazio!
+            </p>
+          )}
           {items.map(item => (
             <ItemCart
               key={item.id}

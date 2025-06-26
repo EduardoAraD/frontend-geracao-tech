@@ -9,66 +9,41 @@ interface ProductApiSearch {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  try {
-    const response = await api.get('/product');
+  const response = await api.get('/product');
 
-    const data: ProductApiSearch = response.data;
+  const data: ProductApiSearch = response.data;
 
-    return data.data;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+  return data.data;
 }
 
 export async function getSomeProducts(): Promise<Product[]> {
-  try {
-    const response = await api.get('/product?limit=6');
+  const response = await api.get('/product?limit=6');
 
-    const productsApi: ProductApiSearch = response.data;
+  const productsApi: ProductApiSearch = response.data;
 
-    return productsApi.data;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+  return productsApi.data;
 }
 
-export async function getProductHigh(): Promise<Product | null> {
-  try {
-    const response = await api.get('/productHigh');
+export async function getProductHigh(): Promise<Product> {
+  const response = await api.get('/productHigh');
 
-    const product: Product = response.data.product;
+  const product: Product = response.data.product;
 
-    return product;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  return product;
 }
 
-export async function getProduct(id: string): Promise<Product | null> {
-  try {
-    const response = await api.get(`/product/${id}`);
+export async function getProduct(id: string): Promise<Product> {
+  const response = await api.get(`/product/${id}`);
 
-    const { product } = response.data;
+  const { product } = response.data;
 
-    return product;
-  } catch (error) {
-    console.log(error);
-    return null
-  }
+  return product;
 }
 
-export async function getProductByCategorys(categorys: number[]) {
-  try {
-    const response = await api.get(`/product?category_ids=${categorys}&limit=8`);
+export async function getProductByCategorys(categorys: number[]): Promise<Product[]> {
+  const response = await api.get(`/product?category_ids=${categorys}&limit=8`);
 
-    const productsApi: ProductApiSearch = response.data;
+  const productsApi: ProductApiSearch = response.data;
 
-    return productsApi.data;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+  return productsApi.data;
 }

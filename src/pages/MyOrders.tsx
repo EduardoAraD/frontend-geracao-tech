@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import { useUser } from "../hooks/useUser";
 
@@ -9,6 +10,7 @@ import ItemOrder from "../components/ItemOrder";
 import Section from "../components/Section";
 
 import { getPurchasesByUserIdServices } from "../services/purchase";
+import { AppError } from "../utils/AppError";
 
 const MyOrders = () => {
   const { user } = useUser();
@@ -16,9 +18,19 @@ const MyOrders = () => {
   const [purchases, setPurchases] = useState<PurchaseApi[]>([])
 
   const loadOrders = useCallback(async () => {
-    if(user !== null) {
-      const response = await getPurchasesByUserIdServices({ id: user.id })
-      setPurchases(response);
+    try {
+      if(user !== null) {
+        const response = await getPurchasesByUserIdServices({ id: user.id })
+        setPurchases(response);
+      }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar os dados do usuário para o formulário.'
+      
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
     }
   }, [user]);
 

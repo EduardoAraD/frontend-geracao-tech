@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import type { Product } from "../Model/Product";
 
@@ -12,6 +13,7 @@ import Section from "../components/Section";
 import TitleSection from "../components/TitleSection";
 
 import { getProductHigh, getSomeProducts } from "../services/products";
+import { AppError } from "../utils/AppError";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -19,11 +21,21 @@ const HomePage = () => {
   const [productHigh, setProductHigh] = useState<Product | null>(null);
 
   async function loadingProduct() {
-    const items = await getSomeProducts();
-    const productHighResponse = await getProductHigh();
+    try {
+      const items = await getSomeProducts();
+      const productHighResponse = await getProductHigh();
 
-    setProducts(items);
-    setProductHigh(productHighResponse);
+      setProducts(items);
+      setProductHigh(productHighResponse);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar os produtos.'
+
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+    }
   }
 
   useEffect(() => {

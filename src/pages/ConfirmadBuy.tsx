@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from "react-toastify";
 
 import { useCart } from "../hooks/useCart";
 import { useUser } from "../hooks/useUser";
@@ -13,16 +14,18 @@ import LabelInput from "../components/LabelInput";
 import Radio from "../components/Radio";
 import Section from "../components/Section";
 
-import { getFormatMoney } from "../utils/formatMoney";
 import { getAddressUserServices } from "../services/address";
 import { getPaymentByUserIdServices } from "../services/payment";
 import { createPurchaseServices } from "../services/purchase";
+import { getFormatMoney } from "../utils/formatMoney";
+import { AppError } from "../utils/AppError";
 
 const ConfirmadBuy = () => {
   const { items, emptyCart } = useCart();
   const { user } = useUser();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
@@ -60,58 +63,84 @@ const ConfirmadBuy = () => {
   }, [totalWithDescount]);
 
   const loadDataUser = useCallback(async () => {
-    if(user !== null) {
-      setName(`${user.firstname} ${user.surname}`);
-      setEmail(user.email);
-      setPhone(user.phone);
-      setCpf(user.cpf);
+    try {
+      if(user !== null) {
+        setName(`${user.firstname} ${user.surname}`);
+        setEmail(user.email);
+        setPhone(user.phone);
+        setCpf(user.cpf);
 
-      const responseAddress = await getAddressUserServices({ id: user.id });
-      if(responseAddress !== null) {
-        setCep(responseAddress.cep);
-        setStreet(responseAddress.address);
-        setDistrict(responseAddress.district);
-        setCep(responseAddress.cep);
-        setComplement(responseAddress.complement);
+        const responseAddress = await getAddressUserServices({ id: user.id });
+        if(responseAddress !== null) {
+          setCep(responseAddress.cep);
+          setStreet(responseAddress.address);
+          setDistrict(responseAddress.district);
+          setCep(responseAddress.cep);
+          setComplement(responseAddress.complement);
+        }
+        const responsePayment = await getPaymentByUserIdServices({ id: user.id });
+        if(responsePayment !== null) {
+          setNumberCard(responsePayment.number);
+          setNameCard(responsePayment.name);
+          setDateValidity(responsePayment.validate_card);
+          setCvv(String(responsePayment.cvv));
+        }
       }
-      const responsePayment = await getPaymentByUserIdServices({ id: user.id });
-      if(responsePayment !== null) {
-        setNumberCard(responsePayment.number);
-        setNameCard(responsePayment.name);
-        setDateValidity(responsePayment.validate_card);
-        setCvv(String(responsePayment.cvv));
-      }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar os dados do usuário para o formulário.'
+      
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
     }
   }, [user]);
 
   async function handleCreatePurchase() {
-    // event?.defaultPrevented();
+    try {
+      if(user === null) return;
 
-    if(user === null) return;
+      setLoading(true);
 
-    const objPurchase: Purchase = {
-      user_id: user.id,
-      products: items.map(item => ({ product_id: item.product.id, quantity: item.quantity })),
-      ref: uuidv4(),
-      type_payment: typePayment,
-      name_completed: name,
-      cpf: cpf.replace(/[^0-9]/g, ""),
-      email,
-      phone: phone.replace(/[^0-9]/g, ""),
-      address: street,
-      district,
-      city,
-      cep: cep.replace(/[^0-9]/g, ""),
-      complement,
-      name_card: nameCard,
-      number_card: numberCard,
-      validate_card: dateValidity,
-      cvv: Number(cvv),
+      const objPurchase: Purchase = {
+        user_id: user.id,
+        products: items.map(item => ({ product_id: item.product.id, quantity: item.quantity })),
+        ref: uuidv4(),
+        type_payment: typePayment,
+        name_completed: name,
+        cpf: cpf.replace(/[^0-9]/g, ""),
+        email,
+        phone: phone.replace(/[^0-9]/g, ""),
+        address: street,
+        district,
+        city,
+        cep: cep.replace(/[^0-9]/g, ""),
+        complement,
+        name_card: nameCard,
+        number_card: numberCard,
+        validate_card: dateValidity,
+        cvv: Number(cvv),
+      }
+      await createPurchaseServices(objPurchase);
+      toast.success("Compra confirmada", {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+
+      emptyCart();
+      navigate(`/compra-finalizada/${objPurchase.ref}`);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao confirmar a compra.'
+      
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+    } finally {
+      setLoading(false);
     }
-    await createPurchaseServices(objPurchase);
-
-    emptyCart();
-    navigate(`/compra-finalizada/${objPurchase.ref}`);
   }
 
   useEffect(() => {
@@ -286,7 +315,7 @@ const ConfirmadBuy = () => {
                 <Card.Title>Finalizar Compra</Card.Title>
                 <Card.Line />
                 <BuyBox total={total} />
-                <Button bgColor="warning" type="submit">
+                <Button bgColor="warning" type="submit" loading={loading}>
                   Realizar Pagamento
                 </Button>
               </Card>
@@ -319,7 +348,7 @@ const ConfirmadBuy = () => {
               </div>
               <BuyBox total={total} />
 
-              <Button bgColor="warning" type="submit">
+              <Button bgColor="warning" type="submit" loading={loading}>
                 Realizar Pagamento
               </Button>
             </Card>
@@ -328,7 +357,7 @@ const ConfirmadBuy = () => {
         <section className="flex md:hidden flex-col bg-white p-7.5 gap-5 rounded-sm">
           <BuyBox total={total} />
 
-          <Button bgColor="warning" type="submit">Realizar Pagamento</Button>
+          <Button bgColor="warning" type="submit" loading={loading}>Realizar Pagamento</Button>
         </section>
       </form>
     </main>

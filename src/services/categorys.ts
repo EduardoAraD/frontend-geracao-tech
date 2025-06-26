@@ -8,14 +8,9 @@ interface CategoryApiSearch {
   data: Category[]
 }
 
-export async function getCategorys(): Promise<Category[]> {
-  try {
-    const response = await api.get('/category');
-    const data: CategoryApiSearch = response.data;
+export async function getCategories(): Promise<Category[]> {
+  const response = await api.get('/category');
+  const data: CategoryApiSearch = response.data;
 
-    return data.data;
-  } catch (err) {
-    console.log(err)
-    return [];
-  }
+  return data.data;
 }

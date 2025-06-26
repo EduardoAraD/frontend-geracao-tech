@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -8,6 +9,7 @@ import LabelInput from "../components/LabelInput";
 import Section from "../components/Section";
 
 import { registerUserServices } from "../services/user";
+import { AppError } from "../utils/AppError";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,23 +22,29 @@ const Register = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmitFormData() {
-    event.preventDefault();
+    try {
+      setLoading(true);
+      event.preventDefault();
 
-    const objUser = {
-      firstname,
-      surname,
-      cpf: cpf.replace(/[^0-9]/g, ""),
-      email,
-      phone: phone.replace(/[^0-9]/g, ""),
-      password,
-      confirmPassword,
-    }
+      const objUser = {
+        firstname,
+        surname,
+        cpf: cpf.replace(/[^0-9]/g, ""),
+        email,
+        phone: phone.replace(/[^0-9]/g, ""),
+        password,
+        confirmPassword,
+      }
 
-    const response = await registerUserServices(objUser);
-    if(response === 'Usuário criado com sucesso'){
-      alert(response);
+      await registerUserServices(objUser);
+
+      toast.success("Cadastrado com sucesso!", {
+        autoClose: 3000,
+        theme: 'colored',
+      })
       setChecked(false);
       setFirstname('');
       setSurname('');
@@ -46,9 +54,17 @@ const Register = () => {
       setPassword('')
       setConfirmPassword('');
 
-      navigate('/login')
-    } else {
-      alert(response);
+      navigate('/login');
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro.'
+
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -141,7 +157,7 @@ const Register = () => {
               onChecked={setChecked}
               title="Quero receber por email ofertas e novidades das lojas da Digital Store. A frequência de envios pode varias de acordo com a interação do cliente."
             />
-            <Button type="submit" className="mb-10 md:mb-20">Criar Conta</Button>
+            <Button loading={loading} type="submit" className="mb-10 md:mb-20">Criar Conta</Button>
           </form>
         </div>
       </Section>

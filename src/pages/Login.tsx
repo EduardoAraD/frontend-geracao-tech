@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { useUser } from "../hooks/useUser";
 
@@ -8,27 +9,23 @@ import LabelInput from "../components/LabelInput";
 import Section from "../components/Section";
 
 import { getLoginUserServices } from "../services/user";
+import { AppError } from "../utils/AppError";
 
 const Login = () => {
   const { saveUser } = useUser();
   const { search } = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleLogin() {
-    event.preventDefault();
+    try {
+      setLoading(true);
 
-    setLoading(true);
-    // event.preventDefault();
-    // console.log(event);
-    const response = await getLoginUserServices({ email, password });
+      const { token, user } = await getLoginUserServices({ email, password });
 
-    setLoading(false);
-    if(response !== null) {
-      const { user, token } = response;
       saveUser({ token, user })
 
       if(search !== undefined) {
@@ -38,9 +35,16 @@ const Login = () => {
         }
       }
       navigate('/');
-    }
-    else {
-      console.log('ERROR');
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao logar.'
+
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+    } finally {
+      setLoading(false);
     }
   }
 

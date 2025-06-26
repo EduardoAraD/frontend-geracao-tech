@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InputIcon } from "primereact/inputicon";
+import { toast } from 'react-toastify';
 
 import { useCart } from "../hooks/useCart";
 
@@ -16,13 +17,15 @@ import TitleSection from "../components/TitleSection";
 
 import { getProduct, getProductByCategorys } from "../services/products";
 import { getFormatMoney } from "../utils/formatMoney";
+import { AppError } from "../utils/AppError";
 
 const ProductViewPage = () => {
   const { id } = useParams();
-  const { addProduct } = useCart()
+  const { addProduct } = useCart();
+  const navigate = useNavigate();
   
   const [product, setProduct] = useState<Product>(emptyProduct);
-  const [similarProducts, setSimilarProducts] = useState<Product[]>([])
+  const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [indexImage, setIndexImage] = useState(0);
@@ -51,22 +54,39 @@ const ProductViewPage = () => {
       quantity: 1,
       color,
       size,
-    })
+    });
+    toast.success("Produto adicionado no carrinho", {
+      autoClose: 3000,
+      theme: "colored",
+    });
   }
 
   const loadProduct = useCallback(async () => {
-    if(id !== undefined) {
-      const idProduct = id.split('-')[0]
-      const response = await getProduct(idProduct);
+    try {
+      setLoading(true);
+      if(id !== undefined) {
+        const idProduct = id.split('-')[0]
+        const response = await getProduct(idProduct);
 
-      if(response !== null) {
-        const listProducts = await getProductByCategorys(response.categorys.map(item => item.id))
-        setProduct(response)
-        setSimilarProducts(listProducts);
+        if(response !== null) {
+          const listProducts = await getProductByCategorys(response.categorys.map(item => item.id))
+          setProduct(response)
+          setSimilarProducts(listProducts);
+        }
       }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar o produto.'
+
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      })
+      navigate('/produtos')
+    } finally {
       setLoading(false)
     }
-  }, [id]);
+  }, [id, navigate]);
 
   useEffect(() => {
     loadProduct()

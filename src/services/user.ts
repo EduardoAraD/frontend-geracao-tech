@@ -3,24 +3,24 @@ import { jwtDecode } from "jwt-decode";
 import type { User } from "../Model/User";
 import { api } from "./api";
 
-export async function getLoginUserServices(objData: { email: string, password: string }) {
-  try {
-    const response = await api.post('/user/token', objData);
+interface GetLoginUserServicesResponse {
+  token: string;
+  user: User;
+}
 
-    const { token } = response.data;
-    if(!token) {
-      return null;
-    }
+export async function getLoginUserServices(objData: { email: string, password: string }): Promise<GetLoginUserServicesResponse> {
+  const response = await api.post('/user/token', objData);
 
-    const { user }: { user: User } = jwtDecode(token);
+  const { token } = response.data;
+  if(!token) {
+    throw { message: "Erro ao se logar" }
+  }
 
-    return {
-      token,
-      user
-    }
-  } catch (error) {
-    console.log(error);
-    return null;
+  const { user }: { user: User } = jwtDecode(token);
+
+  return {
+    token,
+    user
   }
 }
 
@@ -35,12 +35,7 @@ interface RegisterProps {
 }
 
 export async function registerUserServices(objData: RegisterProps) {
-  try {
-    const response = await api.post('/user', objData);
+  const response = await api.post('/user', objData);
 
-    return response.data.message;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  return response.data.message;
 }

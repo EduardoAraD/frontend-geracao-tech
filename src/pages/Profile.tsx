@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import { useUser } from "../hooks/useUser";
 
@@ -9,6 +10,7 @@ import ItemLinePurchase from "../components/ItemLinePurchese";
 import Section from "../components/Section";
 
 import { getAddressUserServices } from "../services/address";
+import { AppError } from "../utils/AppError";
 
 const Profile = () => {
   const { user } = useUser();
@@ -16,13 +18,23 @@ const Profile = () => {
   const [address, setAddress] = useState<Address>(emptyAddress);
 
   const loadingData = useCallback(async () => {
-    if(user === null) {
-      alert('/login');
-    } else {
-      const response = await getAddressUserServices({ id: user.id });
-      if(response !== null) {
-        setAddress(response);
+    try {
+      if(user === null) {
+        alert('/login');
+      } else {
+        const response = await getAddressUserServices({ id: user.id });
+        if(response !== null) {
+          setAddress(response);
+        }
       }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Erro ao buscar os dados do usuário.'
+      
+      toast.error(title, {
+        autoClose: 3000,
+        theme: 'colored'
+      });
     }
   }, [user]);
 

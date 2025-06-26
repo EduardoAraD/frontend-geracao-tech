@@ -14,9 +14,13 @@ const Button = ({ children, bgColor = 'primary', size = 'normal', className, loa
       disabled={loading || disabled}
       {...rest}
     >
-      <p className="text-sm md:text-base text-light_gray3 font-bold">
-        {children}
-      </p>
+      {loading ? (
+        <i className="pi pi-spin pi-spinner text-lg text-white"></i>
+      ) : (
+        <p className="text-sm md:text-base text-light_gray3 font-bold">
+          {children}
+        </p>
+      )}
     </button>
   );
 }
